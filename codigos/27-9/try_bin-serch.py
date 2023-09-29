@@ -22,7 +22,7 @@ def bin_serch(lista, recorrido, serch):
             break
 
         if lista[mid] == serch:
-            print(f"el numero {serch} se encuentra en la posicion {mid} del ciclo {ciclo}")
+            print(f"el numero {serch} esta en la posicion {mid} del ciclo {ciclo}")
             break
 
         #condiciones de utilidad
@@ -39,8 +39,9 @@ def bin_serch(lista, recorrido, serch):
             print(f"aparentemente el numero {serch} no forma parte de la lista")
 
 #main
-lista = [i for i in range(1, 10000000)]
+lista = [i for i in range(1, 1000)]
 recorrido = len(lista)
-serch = random.randint(1, 10000000)
+serch = random.randint(1, 1000)
+
 
 bin_serch(lista, recorrido, serch)
