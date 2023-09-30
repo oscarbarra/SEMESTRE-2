@@ -1,5 +1,4 @@
 #haciendo el ultimo ejercicio de la prueba
-import random
 
 class Persona:
     def __init__(self, nombre, apellido, fecha_nacimiento):
@@ -9,6 +8,7 @@ class Persona:
 
     def presentarse(self):
         print(f"hola soy {self.nombre} {self.apellido} y nací en {self.fecha_nacimiento}")
+
 
 class Estudiante(Persona):
     def __init__(self,nombre, apellido, fecha_nacimiento, matricula, carrera, semestre):
@@ -23,19 +23,19 @@ class Estudiante(Persona):
     def presentarse(self):
         print(f"hola soy {self.nombre} {self.apellido} naci el {self.fecha_nacimiento}\ny voy en el semestre {self.semestre} de {self.carrera}")
 
-    def __repr__(self):
-        return self.nombre, self.apellido
 
 class Profesor(Persona):
     def __init__(self,nombre, apellido, fecha_nacimiento, numero_empleado, departamento):
         self.numero_empleado = numero_empleado
         self.departamento = departamento
         super().__init__(nombre, apellido, fecha_nacimiento)
+
     def enseñar(self, materia):
         print(f"el profesor {self.nombre} esta enseñando {materia}")
     
     def presentarse(self):
         print(f"hola soy el profesor {self.nombre}, formo parte del departamento de {self.departamento} y voy a estar todo el semestre con ustedes")
+
 
 class Asignatura:
     def __init__(self, nombre, codigo, creditos):
@@ -46,6 +46,7 @@ class Asignatura:
     def mostrar_informacion(self):
         print(f"id: {self.codigo} nombre: {self.nombre} creditos_max: {self.creditos}")
  
+
 class Grupo:
     def __init__(self, numero_grupo, asignatura, profesor):
         self.numero_grupo = numero_grupo 
@@ -53,21 +54,50 @@ class Grupo:
         self.profesor = profesor #objeto
         self.estudiantes = [] #lista objetos
 
-    def agregar_estudiante(self, estudiante):
+    def agregar_estudiante(self, new_estudiante):
+        tam_grupo = len(self.estudiantes)
+        aprobacion = True
+
+        if tam_grupo == 0:
+            self.estudiantes.append([new_estudiante.nombre, new_estudiante.apellido])
+            print(f"{new_estudiante.nombre} {new_estudiante.apellido} ha sido agregado correctamente al grupo")
+        
+        else:
+            for i in range(0, tam_grupo):
+                if new_estudiante.nombre == self.estudiantes[i][0] and new_estudiante.apellido == self.estudiantes[i][1]:
+                    aprobacion = False
+
+            if aprobacion:
+                self.estudiantes.append([new_estudiante.nombre, new_estudiante.apellido])
+                print(f"{new_estudiante.nombre} {new_estudiante.apellido} ha sido agregado correctamente al grupo")
+        
+            else:
+                print(f"{new_estudiante.nombre} {new_estudiante.apellido} ya forma parte de este grupo")
+
+            
+    def eliminar_estudiante(self, del_estudiante):
         tam_grupo = len(self.estudiantes)
         aprobacion = False
 
-        for i in range(0, tam_grupo):
-            for j in range(0, tam_grupo):
-                if True:
-                    pass
+        if tam_grupo == 1:
+            self.estudiantes.remove([del_estudiante.nombre, del_estudiante.apellido])
+            print(f"{del_estudiante.nombre} {del_estudiante.apellido} ha sido eliminado correctamente del grupo")
+        
+        else:
+            for i in range(0, tam_grupo):
+                if del_estudiante.nombre == self.estudiantes[i][0] and del_estudiante.apellido == self.estudiantes[i][1]:
+                    aprobacion = True
 
-            
-    def eliminar_estudiante(self):
-        pass
+            if aprobacion:
+                self.estudiantes.remove([del_estudiante.nombre, del_estudiante.apellido])
+                print(f"{del_estudiante.nombre} {del_estudiante.apellido} ha sido eliminado correctamente del grupo")
+        
+            else:
+                print(f"{del_estudiante.nombre} {del_estudiante.apellido} no forma parte del grupo")
 
     def mostrar_grupo(self):
-        print(self.estudiantes)
+        print(self.estudiantes, end="\n\n")
+
 
 class ProgramaAcademico:
     def __init__(self, nombre, codigo, grupos):
@@ -77,10 +107,19 @@ class ProgramaAcademico:
 
 
 E1 = Estudiante("oscar", "barra", "17/04/2005", 0, "informatica", 2)
-#E2 = Estudiante("oscar", "barra", "17/04/2005", 0, "informatica", 2)
+E2 = Estudiante("christian", "lagos", "19/04/2005", 0, "medicina", 1)
 
 G1 = Grupo(0, "programacion 2", "elliot")
+
 G1.mostrar_grupo()
 G1.agregar_estudiante(E1)
-#G1.agregar_estudiante(E2)
+G1.mostrar_grupo()
+
+G1.agregar_estudiante(E2)
+G1.mostrar_grupo()
+
+G1.eliminar_estudiante(E1)
+G1.mostrar_grupo()
+
+G1.eliminar_estudiante(E2)
 G1.mostrar_grupo()
