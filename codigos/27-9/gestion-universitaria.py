@@ -66,7 +66,7 @@ class Grupo:
         
         else:
             for i in range(0, tam_grupo):
-                if new_estudiante.nombre == self.estudiantes[i][0] and new_estudiante.apellido == self.estudiantes[i][1]:
+                if new_estudiante.nombre == self.estudiantes[i].nombre and new_estudiante.apellido == self.estudiantes[i].apellido:
                     aprobacion = False
 
             if aprobacion:
@@ -87,7 +87,7 @@ class Grupo:
         
         else:
             for i in range(0, tam_grupo):
-                if del_estudiante.nombre == self.estudiantes[i][0] and del_estudiante.apellido == self.estudiantes[i][1]:
+                if del_estudiante.nombre == self.estudiantes[i].nombre and del_estudiante.apellido == self.estudiantes[i].apellido:
                     aprobacion = True
 
             if aprobacion:
@@ -98,8 +98,19 @@ class Grupo:
                 print(f"{del_estudiante.nombre} {del_estudiante.apellido} no forma parte del grupo")
 
     def mostrar_grupo(self):
-        print(self.estudiantes, end="\n\n")
+        if len(self.estudiantes) == 0:
+            print(self.estudiantes)
 
+        else:
+            for i in range(0, len(self.estudiantes)):
+                j = i+1
+                if j % 6 == 0:
+                    print("\n")
+                    print([self.estudiantes[i].nombre + " " + self.estudiantes[i].apellido], end=" ")
+                    
+                else:
+                    print([self.estudiantes[i].nombre + " " + self.estudiantes[i].apellido], end=" ")
+        print("\n")
 
 class ProgramaAcademico:
     def __init__(self, nombre, codigo, grupos):
@@ -110,6 +121,11 @@ class ProgramaAcademico:
 
 E1 = Estudiante("oscar", "barra", "17/04/2005", 0, "informatica", 2)
 E2 = Estudiante("christian", "lagos", "19/04/2005", 0, "medicina", 1)
+E3 = Estudiante("oscar", "jara", "17/04/2005", 0, "informatica", 2)
+E4 = Estudiante("christian", "rojas", "19/04/2005", 0, "medicina", 1)
+E5 = Estudiante("felipe","ocampo", "17/04/2005", 0, "informatica", 2)
+E6 = Estudiante("max", "vañenzuela", "19/04/2005", 0, "medicina", 1)
+E7 = Estudiante("max", "nunez", "19/04/2005", 0, "medicina", 1)
 
 G1 = Grupo(0, "programacion 2", "elliot")
 
@@ -120,8 +136,26 @@ G1.mostrar_grupo()
 G1.agregar_estudiante(E2)
 G1.mostrar_grupo()
 
-G1.eliminar_estudiante(E1)
+#G1.eliminar_estudiante(E1)
+#G1.mostrar_grupo()
+
+G1.agregar_estudiante(E3)
 G1.mostrar_grupo()
 
-G1.eliminar_estudiante(E2)
+G1.agregar_estudiante(E4)
 G1.mostrar_grupo()
+
+G1.agregar_estudiante(E5)
+G1.mostrar_grupo()
+
+G1.agregar_estudiante(E6)
+G1.mostrar_grupo()
+
+G1.agregar_estudiante(E7)
+G1.mostrar_grupo()
+
+
+#G1.eliminar_estudiante(E2)
+#G1.mostrar_grupo()
+
+#print(G1.estudiantes)

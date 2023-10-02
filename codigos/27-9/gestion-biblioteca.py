@@ -13,8 +13,8 @@ class Biblioteca:
         self.catalogo = [[i, libros[i]] for i in range(len(libros))]
 
 
-    def mostrar_catalogo(self, indice=0):
-        if indice == 0:
+    def mostrar_catalogo(self, indice="xxx"):
+        if indice == "xxx":
             print(self.catalogo)
         else:
             print(indice)
