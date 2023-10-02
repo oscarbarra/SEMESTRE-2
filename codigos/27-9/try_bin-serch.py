@@ -14,7 +14,6 @@ def bin_serch(lista, recorrido, serch):
         max_value = len(lista)
 
         print(f"mid = {mid}, min = {min_value}, max = {max_value}")
-        print(lista[mid])
 
         #condiciones de termino
         if recorrido == 1 and lista[min_value] == serch:
@@ -39,9 +38,9 @@ def bin_serch(lista, recorrido, serch):
             print(f"aparentemente el numero {serch} no forma parte de la lista")
 
 #main
-lista = [i for i in range(1, 1000)]
+lista = [i for i in range(1, 100000)]
 recorrido = len(lista)
-serch = random.randint(1, 1000)
+serch = random.randint(1, 100000)
 
 
 bin_serch(lista, recorrido, serch)
