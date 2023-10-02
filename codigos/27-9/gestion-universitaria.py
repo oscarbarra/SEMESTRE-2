@@ -23,8 +23,6 @@ class Estudiante(Persona):
     def presentarse(self):
         print(f"hola soy {self.nombre} {self.apellido} naci el {self.fecha_nacimiento}\ny voy en el semestre {self.semestre} de {self.carrera}")
 
-    def __str__(self):
-        return f"{self.nombre} {self.apellido}"
 
 class Profesor(Persona):
     def __init__(self,nombre, apellido, fecha_nacimiento, numero_empleado, departamento):
@@ -75,8 +73,7 @@ class Grupo:
         
             else:
                 print(f"{new_estudiante.nombre} {new_estudiante.apellido} ya forma parte de este grupo")
-
-            
+        
     def eliminar_estudiante(self, del_estudiante):
         tam_grupo = len(self.estudiantes)
         aprobacion = False
@@ -112,11 +109,44 @@ class Grupo:
                     print([self.estudiantes[i].nombre + " " + self.estudiantes[i].apellido], end=" ")
         print("\n")
 
+
 class ProgramaAcademico:
-    def __init__(self, nombre, codigo, grupos):
+    def __init__(self, nombre, codigo):
         self.nombre = nombre
         self.codigo = codigo
-        self.grupos = grupos #lista obejtos
+        self.grupos_programa = [] #lista obejtos
+
+    def agregar_grupo(self, grupo):
+        aprobacion = True
+
+        for i in range(0, len(self.grupos_programa)):
+            if grupo.numero_grupo == self.grupos_programa[i].numero_grupo:
+                aprobacion = False
+
+        if aprobacion:
+            self.grupos_programa.append(grupo)
+            print(f"el grupo {grupo.numero_grupo} ha sido agregado correctamente al programa academico")
+
+        else:
+            print(f"el grupo {grupo.numero_grupo} ya forma parte del programa academico o id invalido")
+
+    def eliminar_grupo(self, grupo):
+        aprobacion = False
+
+        for i in range(0, len(self.grupos_programa)):
+            if grupo.numero_grupo == self.grupos_programa[i].numero_grupo:
+                aprobacion = True
+
+        if aprobacion:
+            self.grupos_programa.remove(grupo)
+            print(f"el grupo {grupo.numero_grupo} ha sido eliminado correctamente al programa academico")
+
+        else:
+            print(f"el grupo {grupo.numero_grupo} no forma parte del programa academico o id invalido")
+
+    def mostrar_programa(self):
+        for i in range(0, len(self.grupos_programa)):
+            print(f"profesor: {self.grupos_programa[i].profesor}\nasignatura: {self.grupos_programa[i].asignatura}\n")
 
 
 E1 = Estudiante("oscar", "barra", "17/04/2005", 0, "informatica", 2)
@@ -124,38 +154,41 @@ E2 = Estudiante("christian", "lagos", "19/04/2005", 0, "medicina", 1)
 E3 = Estudiante("oscar", "jara", "17/04/2005", 0, "informatica", 2)
 E4 = Estudiante("christian", "rojas", "19/04/2005", 0, "medicina", 1)
 E5 = Estudiante("felipe","ocampo", "17/04/2005", 0, "informatica", 2)
-E6 = Estudiante("max", "vañenzuela", "19/04/2005", 0, "medicina", 1)
-E7 = Estudiante("max", "nunez", "19/04/2005", 0, "medicina", 1)
 
-G1 = Grupo(0, "programacion 2", "elliot")
 
+G1 = Grupo(0, "programacion 2", "xxx")
+G2 = Grupo(1, "algebra", "xxx")
+
+P1 = ProgramaAcademico("ingenieria", "A1")
+
+print("integrantes iniciales del grupo/curso")
 G1.mostrar_grupo()
+input("")
+
+print("agrego estudientes al grupo/curso")
 G1.agregar_estudiante(E1)
 G1.mostrar_grupo()
+input("")
 
 G1.agregar_estudiante(E2)
 G1.mostrar_grupo()
+input("")
 
-#G1.eliminar_estudiante(E1)
-#G1.mostrar_grupo()
-
-G1.agregar_estudiante(E3)
+print("elimino estudiantes del grupo/curso")
+G1.eliminar_estudiante(E1)
 G1.mostrar_grupo()
-
-G1.agregar_estudiante(E4)
-G1.mostrar_grupo()
-
-G1.agregar_estudiante(E5)
-G1.mostrar_grupo()
-
-G1.agregar_estudiante(E6)
-G1.mostrar_grupo()
-
-G1.agregar_estudiante(E7)
-G1.mostrar_grupo()
+input("")
 
 
-#G1.eliminar_estudiante(E2)
-#G1.mostrar_grupo()
+print("agrego el grupo/curso al programa academico")
+P1.agregar_grupo(G1)
+P1.mostrar_programa()
+input("")
 
-#print(G1.estudiantes)
+P1.agregar_grupo(G2)
+P1.mostrar_programa()
+input("")
+
+print("eliminar un grupo del programa academico")
+P1.eliminar_grupo(G1)
+P1.mostrar_programa()
