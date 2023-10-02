@@ -17,7 +17,6 @@ class Biblioteca:
         if indice == "xxx":
             print(self.catalogo)
         else:
-            print(indice)
             print(self.catalogo[indice])
 
 
@@ -80,11 +79,20 @@ L5 = Libro("moby dick")
 #inicializacion de un empleado que interactua con la biblioteca
 E1 = Biblioteca(L1, L2, L3, L4, L5)
 
+print("catalogo inicial")
 E1.mostrar_catalogo()
+input(" ")
 
+print("agrega el libro oscar al catalogo")
 E1.agregar_libro("oscar")
 E1.mostrar_catalogo()
+input(" ")
 
-E1.buscar_libro("moby dick")
+print("buscar un libro por el nombre")
+E1.buscar_libro(input("ingresar el nombre del libro: "))
+input(" ")
+
+
 #muestra la info del id ingresado
+print("buscar un libro por el id")
 E1.mostrar_catalogo(int(input("ingresar el id del libro que desea buscar: ")))
