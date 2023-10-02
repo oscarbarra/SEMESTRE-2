@@ -23,6 +23,8 @@ class Estudiante(Persona):
     def presentarse(self):
         print(f"hola soy {self.nombre} {self.apellido} naci el {self.fecha_nacimiento}\ny voy en el semestre {self.semestre} de {self.carrera}")
 
+    def __str__(self):
+        return f"{self.nombre} {self.apellido}"
 
 class Profesor(Persona):
     def __init__(self,nombre, apellido, fecha_nacimiento, numero_empleado, departamento):
@@ -59,7 +61,7 @@ class Grupo:
         aprobacion = True
 
         if tam_grupo == 0:
-            self.estudiantes.append([new_estudiante.nombre, new_estudiante.apellido])
+            self.estudiantes.append(new_estudiante)
             print(f"{new_estudiante.nombre} {new_estudiante.apellido} ha sido agregado correctamente al grupo")
         
         else:
@@ -68,7 +70,7 @@ class Grupo:
                     aprobacion = False
 
             if aprobacion:
-                self.estudiantes.append([new_estudiante.nombre, new_estudiante.apellido])
+                self.estudiantes.append(new_estudiante)
                 print(f"{new_estudiante.nombre} {new_estudiante.apellido} ha sido agregado correctamente al grupo")
         
             else:
@@ -80,7 +82,7 @@ class Grupo:
         aprobacion = False
 
         if tam_grupo == 1:
-            self.estudiantes.remove([del_estudiante.nombre, del_estudiante.apellido])
+            self.estudiantes.remove(del_estudiante)
             print(f"{del_estudiante.nombre} {del_estudiante.apellido} ha sido eliminado correctamente del grupo")
         
         else:
@@ -89,7 +91,7 @@ class Grupo:
                     aprobacion = True
 
             if aprobacion:
-                self.estudiantes.remove([del_estudiante.nombre, del_estudiante.apellido])
+                self.estudiantes.remove(del_estudiante)
                 print(f"{del_estudiante.nombre} {del_estudiante.apellido} ha sido eliminado correctamente del grupo")
         
             else:
