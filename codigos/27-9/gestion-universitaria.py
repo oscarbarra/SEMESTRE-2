@@ -15,6 +15,7 @@ class Estudiante(Persona):
         self.matricula = matricula
         self.carrera = carrera
         self.semestre = semestre
+        #llamo al constructor de la clase padre
         super().__init__(nombre, apellido, fecha_nacimiento)
 
     def estudiar(self, materia, horas_estudio):
@@ -28,6 +29,7 @@ class Profesor(Persona):
     def __init__(self,nombre, apellido, fecha_nacimiento, numero_empleado, departamento):
         self.numero_empleado = numero_empleado
         self.departamento = departamento
+        #llamo al constructor de la clase padre
         super().__init__(nombre, apellido, fecha_nacimiento)
 
     def enseñar(self, materia):
@@ -146,7 +148,12 @@ class ProgramaAcademico:
 
     def mostrar_programa(self):
         for i in range(0, len(self.grupos_programa)):
-            print(f"profesor: {self.grupos_programa[i].profesor}\nasignatura: {self.grupos_programa[i].asignatura}\n")
+            print(f"profesor: {self.grupos_programa[i].profesor}\nasignatura: {self.grupos_programa[i].asignatura.nombre}\n")
+
+
+
+A1 = Asignatura("programacion 2", "aaa", 100)
+A2 = Asignatura("algebra", "bbb", 80)
 
 
 E1 = Estudiante("oscar", "barra", "17/04/2005", 0, "informatica", 2)
@@ -156,8 +163,8 @@ E4 = Estudiante("christian", "rojas", "19/04/2005", 0, "medicina", 1)
 E5 = Estudiante("felipe","ocampo", "17/04/2005", 0, "informatica", 2)
 
 
-G1 = Grupo(0, "programacion 2", "xxx")
-G2 = Grupo(1, "algebra", "xxx")
+G1 = Grupo(0, A1, "xxx")
+G2 = Grupo(1, A2, "xxx")
 
 P1 = ProgramaAcademico("ingenieria", "A1")
 
