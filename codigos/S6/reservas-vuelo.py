@@ -6,49 +6,65 @@ class Reserva:
 
 
 class Reserva_Economica(Reserva):
-    def __init__(self, nombre, num_vuelo, fecha, tipo):
-        super().__init__(nombre, num_vuelo, fecha)
+    def __init__(self, nombre, fecha):
+        super().__init__(nombre, 1, fecha)
         self.tipo_vuelo = "Economico"
-        self.tipo = tipo
-        
-    def presentacion(self):
-        print(f"hola soy {self.nombre_pasajero} y compre un boleto {self.tipo_vuelo} {self.tipo}")
-
+        self.horas_de_vuelo = "16h"
+ 
     def mostrar_detalle(self):
-        print(f"soy {self.nombre_pasajero} voy en el vuelo {self.numero_vuelo} y puedo escoger entre plan familiar e individual")
+        print(f"nombre: {self.nombre_pasajero}, vuelo: {self.numero_vuelo} {self.tipo_vuelo}, fecha: {self.fecha}")
 
+    def descripcion_vuelo(self):
+        print(f"soy el vuelo que más tarde en llegar a destino, tardando {self.horas_de_vuelo} en aterrizar")
 
 class Reserva_Bisness(Reserva):
-    def __init__(self, nombre, num_vuelo, fecha):
-        super().__init__(nombre, num_vuelo, fecha)
+    def __init__(self, nombre, fecha):
+        super().__init__(nombre, 2, fecha)
         self.tipo_vuelo = "Bisness"
-        self.entretenimiento = "incluido"
-
-    def presentacion(self):
-        print(f"hola soy {self.nombre_pasajero} y compre un boleto tipo {self.tipo_vuelo}")
-
+        self.horas_de_vuelo = "10h"
+ 
     def mostrar_detalle(self):
-        print(f"soy {self.nombre_pasajero} voy en el vuelo {self.numero_vuelo} y puedo pasar el rato con un entretenimiento {self.entretenimiento}")
+        print(f"nombre: {self.nombre_pasajero}, vuelo: {self.numero_vuelo} {self.tipo_vuelo}, fecha: {self.fecha}")
 
+    def descripcion_vuelo(self):
+        print(f"soy el vuelo que se encuentra en el promedio de los otros, tardando {self.horas_de_vuelo} en aterrizar")
 
 class Reserva_Primera_Clase(Reserva):
-    def __init__(self, nombre, num_vuelo, fecha):
-        super().__init__(nombre, num_vuelo, fecha)
+    def __init__(self, nombre, fecha):
+        super().__init__(nombre, 2, fecha)
         self.tipo_vuelo = "primera clase"
-        self.comidas = "incluido"
+        self.horas_de_vuelo = "4h"
 
-    def presentacion(self):
-        print(f"hola soy {self.nombre_pasajero} y compre un voleto de {self.tipo_vuelo}")
-    
     def mostrar_detalle(self):
-        print(F"soy {self.nombre_pasajero} voy en el vuelo {self.numero_vuelo} que tiene la comida {self.comidas}")
+        print(f"nombre: {self.nombre_pasajero}, vuelo: {self.numero_vuelo} {self.tipo_vuelo}, fecha: {self.fecha}")
+
+    def descripcion_vuelo(self):
+        print(f"soy el vuelo que menos tarde en llegar a destino, tardando {self.horas_de_vuelo} en aterrizar")
+
+E1 = Reserva_Economica("felipe","01/01/2023")
+E2 = Reserva_Economica("eduardo", "02/10/2023")
+
+B1 = Reserva_Bisness("oscar", "01/01/2023")
+B2 = Reserva_Bisness("cristhofer", "03/10/2023")
+
+P1 = Reserva_Primera_Clase("christian", "01/01/2023")
+P2 = Reserva_Primera_Clase("esteban", "03/10/2023")
+
+print("reserva economica")
+E1.descripcion_vuelo()
+print("\ndetalles del vuelo reservado")
+E1.mostrar_detalle()
+input("")
 
 
-P1 = Reserva_Economica("felipe", 1, "01/01/2023", "personal")
-P2 = Reserva_Bisness("oscar", 2, "01/01/2023")
-P3 = Reserva_Primera_Clase("christian", 3, "01/01/2023")
+print("reserva bisness")
+B1.descripcion_vuelo()
+print("\ndetalles del vuelo reservado")
+B1.mostrar_detalle()
+input("")
 
-for i in (P1, P2, P3):
-    i.presentacion()
-    i.mostrar_detalle()
-    print("\n")
+print("reserva de primera clase")
+P1.descripcion_vuelo()
+print("\ndetalles del vuelo reservado")
+P1.mostrar_detalle()
+input("")
