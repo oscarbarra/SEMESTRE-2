@@ -13,7 +13,8 @@ class Biblioteca:
         self.catalogo = [[i, libros[i]] for i in range(len(libros))]
 
 
-    def mostrar_catalogo(self, indice="xxx"):
+    #utiliza un argumento opcional
+    def mostrar_catalogo(self, indice="xxx"): 
         if indice == "xxx":
             print(self.catalogo)
         else:
@@ -51,7 +52,7 @@ class Biblioteca:
                 print(f"el libro {buscar} tiene id 0 dentro del catalogo")
                 break
 
-            if str(lista_aux[mid][1]) == buscar:
+            elif str(lista_aux[mid][1]) == buscar:
                 print(f"el libro {buscar} tiene id {pos_libro} dentro del catalogo") 
                 break
 
@@ -71,7 +72,7 @@ class Biblioteca:
 #funcionamiento del programa
 #inicializacion de los libros de la biblioteca
 L1 = Libro("muerte en el nilo")
-L2 = Libro("el pricipito")
+L2 = Libro("el principito")
 L3 = Libro("la bella y la bestia")
 L4 = Libro("pinocho")
 L5 = Libro("moby dick")
