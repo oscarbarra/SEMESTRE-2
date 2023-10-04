@@ -164,7 +164,7 @@ E5 = Estudiante("felipe","ocampo", "17/04/2005", 0, "informatica", 2)
 
 
 G1 = Grupo(0, A1, "xxx")
-G2 = Grupo(1, A2, "xxx")
+G2 = Grupo(1, A2, "yyy")
 
 P1 = ProgramaAcademico("ingenieria", "A1")
 
