@@ -5,51 +5,72 @@ class Empleado:
         self.salario = salario
 
 class Gerente(Empleado):
-    def __init__(self, nombre, edad, salario, grupo, años_trabajos):
+    def __init__(self, nombre, edad, salario, trab_pendientes):
         super().__init__(nombre, edad, salario)
-        self.grupo = grupo #grupo al que perteneco
-        self.pos = "Gerente" #posicion de trabajo en la empresa
-        self.años_trabajados = años_trabajos
-
-    def presentacion(self):
-        print(f"hola soy {self.nombre} y en la empresa he trabajado {self.años_trabajados} anos")
+        
+        #trabajos por revisar
+        self.trabajos_pendientes = trab_pendientes
 
     def describir_rol(self):
-        print(f"yo como {self.pos} me encargo de que todos los grupos funcionen correctamente")
+        print("me encargo de gestionar y aprobar los trabajos de esta empresa")
+
+    def mostrar_trabajos_pendientes(self):
+        print(f"actualmente tengo {self.trabajos_pendientes} trabajos que revisar")
 
 
 class Ingeniero(Empleado):
-    def __init__(self, nombre, edad, salario, grupo, tipo):
+    def __init__(self, nombre, edad, salario, trab_activo):
         super().__init__(nombre, edad, salario)
-        self.grupo = grupo 
-        self.pos = "ingeniero"
-        self.tipo = tipo
 
-    def presentacion(self):
-        print(f"hola soy {self.nombre} y trabajo como {self.pos} {self.tipo}")
+        #identificador para no alterar el orden de la empresa
+        self.trabajo_activo = trab_activo 
 
     def describir_rol(self):
-        print(f"yo como {self.pos} me encargo de realizar los proyectos que aprueba el gerente")
+        print("me encargo de dar solucion a los trabajos aprobados por el gerente")
+
+    def mostrar_trabajos_activos(self):
+        print(f"actualmente estoy trabajando en el proyecto {self.trabajo_activo}")
+
 
 class Asistente(Empleado):
-    def __init__(self, nombre, edad, salario, grupo, dias_trabajo):
+    def __init__(self, nombre, edad, salario):
         super().__init__(nombre, edad, salario)
-        self.grupo = grupo  
-        self.pos = "Asistente"
-        self.dias_trabajo = dias_trabajo
 
-    def presentacion(self):
-        print(f"hola soy {self.nombre} y trabajo de {self.dias_trabajo}")
+        self.registro_gastos = []
 
     def describir_rol(self):
-        print(f"yo como {self.pos} me encargo de gestionar el dia del gerente")
+        print("principalmente me encargo de crear y actuelizar los informes de gastos")
+
+    def agragar_gastos(self,mes, gasto_mesnsual):
+        self.registro_gastos.append([mes, gasto_mesnsual])
+
+    def mostrar_resgistro(self):
+        print("gastos de la enpresa")
+        for i in self.registro_gastos:
+            print(i)
+        
 
 
-G1 = Gerente("felipe", 25, 1000000, 0, 15)
-I1 = Ingeniero("oscar", 20, 750000, 1, "civil informatico")
-A1 = Asistente("florencia", 40, 600000, 1, "lunes/miercoles")
 
-for i in (G1, I1, A1):
-    i.presentacion()
-    i.describir_rol()
-    print("\n")
+
+#creacion de los objetos
+G1 = Gerente("felipe", 25, 1000000, 123)
+I1 = Ingeniero("eduardo", 20, 750000, "a1")
+A1 = Asistente("florencia", 40, 600000)
+
+print("gerente")
+G1.describir_rol()
+G1.mostrar_trabajos_pendientes()
+input("")
+
+print("ingeniero")
+I1.describir_rol()
+I1.mostrar_trabajos_activos()
+input("")
+
+print("asistente")
+A1.describir_rol()
+A1.agragar_gastos("enero", 10)
+A1.agragar_gastos("febrero", 9)
+A1.agragar_gastos("marzo", 8)
+A1.mostrar_resgistro()
