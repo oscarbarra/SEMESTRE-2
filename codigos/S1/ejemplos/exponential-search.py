@@ -1,56 +1,22 @@
+def binary_search(arr, left, right, x):
+    if right >= left:
+        mid = left + (right - left) // 2
+        if arr[mid] == x:
+            return mid
+        if arr[mid] > x:
+            return binary_search(arr, left, mid-1, x)
+        return binary_search(arr, mid+1, right, x)
+    return -1
 
-def bin_search(list, search):
-    while True:
-        #actualizacion de los valores clave
-        min_ind = 0
-        mid_ind = len(list) // 2
-        max_ind = len(list)
+def exponential_search(arr, x):
+    if arr[0] == x:
+        return 0
+    i = 1
+    while i < len(arr) and arr[i] <= x:
+        i = i * 2
+    return binary_search(arr, i // 2, min(i, len(arr)-1), x)
 
-        print(f"min: {list[mid_ind]}, mid: {list[mid_ind]}, max: {list[max_ind-1]}")
-
-        if max_ind == 1 and list[min_ind] == search:
-            print(f"el numero {search} esta en la pos {min_ind}")
-            break
-
-        elif max_ind == 1 and list[min_ind] != search:
-            print(f"el numero {search} no pertenece a la lista")
-            break
-
-        elif list[mid_ind] == search:
-            print(f"el numero {search} esta en la pos {mid_ind}")
-            break
-
-        elif mid_ind > search:
-            max_ind = mid_ind
-            list = list[min_ind : max_ind]
-
-        elif mid_ind < search:
-            min_ind = mid_ind
-            list = list[min_ind : max_ind]
-    return
-
-def exponential_search(list, search):
-    auxiliar = 1
-    min_ind = 0
-    max_ind = len(list)
-
-    while auxiliar < max_ind:
-        if list[0] == search:
-            print(f"el numero {search} esta en la pos {0}")
-            break
-
-        elif list[auxiliar] >= search:
-            max_ind = auxiliar+1
-            break
-
-        elif list[auxiliar] <= search:
-            min_ind = auxiliar
-            auxiliar +=auxiliar
-    
-    bin_search(list[min_ind : max_ind], search)
-    return
-
-#creacion de la lista
-list = [i for i in range(0, 10000)]
-#llamada a la funcion principal
-exponential_search(list, 156)
+# Código de prueba
+arr = [i for i in range(1, 10000)]
+x = 2
+print(f"El número {x} está en el índice {exponential_search(arr, x)}")
