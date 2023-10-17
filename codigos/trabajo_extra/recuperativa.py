@@ -33,6 +33,17 @@ class Nombre:
                 print(f"el numero {number_to_serch} se encuentra en la posicion {mid}")
                 return mid
         return
+    
+    def linear_search(self, search_num):
+        lista_ind = []
+        for i  in range(0, len(self.lista)):
+             if self.lista[i] == search_num:
+                 lista_ind.append(i)
+
+        print(f"el numero {search_num} esta en los indices:", end=" ")
+        for j in range(0, len(lista_ind)):
+            print(f"{lista_ind[j]}", end=" ")
+
 
     def mostrar_lista(self):
         print(self.lista)
@@ -55,4 +66,4 @@ print(p1.lista)
 input("")
 
 print("buscar numero indicado")
-p1.binary_serch()
+p1.linear_search(int(input("ingresar el numero a buscar: ")))
