@@ -1,7 +1,10 @@
 #cositas importantes
 #crear lista/ ordenar lista/ buscar numero
 
-class lista:
+from asyncio.windows_events import NULL
+
+
+class Recuperatorio:
     def __init__(self):
         self.lista = []
         self.lista_ordenada = False
@@ -51,23 +54,33 @@ class lista:
     def interfaz(self):
         while True:
             print("0:temino programa,  1:crear_lista,  2:ordenar_lista,  3:buscar_numero\n")
-            opcion = int(input("ingresar una opcion: "))
-            if opcion == 0:
+            opcion = (input("ingresar una opcion: "))
+
+            if opcion == "":
+                print("porfavor ingresar una de las opciones\n")
+
+            elif int(opcion) not in [0, 1, 2, 3]:
+                print("porfavor ingresar una de las opciones\n")
+
+            elif int(opcion) == 0:
                 print("termino del programa")
                 break
-            elif opcion == 1:
+
+            elif int(opcion) == 1:
                 self.lista = []
                 self.lista_ordenada = False
                 self.rellenar_lista(int(input("cantidad de numeros a agregar: ")))
                 print("\nla lista creada es:")
                 self.mostrar_lista()
                 input("\n")
-            elif opcion == 2:
+
+            elif int(opcion) == 2:
                 self.select_sort()
                 print("\nla lista ordenada es:")
                 self.mostrar_lista()
                 input("\n")
-            elif opcion == 3:
+
+            elif int(opcion) == 3:
                 if self.lista_ordenada:
                     self.linear_search(int(input("ingresar el numero a buscar: ")))
                     input("")
@@ -80,5 +93,5 @@ class lista:
         print(self.lista)
 
 
-p1 = lista()
+p1 = Recuperatorio()
 p1.interfaz()
