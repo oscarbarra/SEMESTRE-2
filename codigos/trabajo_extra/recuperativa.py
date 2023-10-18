@@ -56,6 +56,8 @@ class Recuperatorio:
                 print("termino del programa")
                 break
             elif opcion == 1:
+                self.lista = []
+                self.lista_ordenada = False
                 self.rellenar_lista(int(input("cantidad de numeros a agregar: ")))
                 print("\nla lista creada es:")
                 self.mostrar_lista()
