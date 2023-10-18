@@ -1,7 +1,7 @@
 #cositas importantes
 #crear lista/ ordenar lista/ buscar numero
 
-class Recuperatorio:
+class lista:
     def __init__(self):
         self.lista = []
         self.lista_ordenada = False
@@ -80,5 +80,5 @@ class Recuperatorio:
         print(self.lista)
 
 
-p1 = Recuperatorio()
+p1 = lista()
 p1.interfaz()
