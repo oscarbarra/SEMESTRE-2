@@ -1,9 +1,21 @@
 #cositas importantes
 #crear lista/ ordenar lista/ buscar numero
 
-class Nombre:
-    def __init__(self, tam):
-        self.lista = [int(input("ingresar un numero: ")) for i in range(tam)]
+class Recuperatorio:
+    def __init__(self):
+        self.lista = []
+        self.lista_ordenada = False
+
+    def rellenar_lista(self, tam):
+        while len(self.lista) < tam:
+            num = input("ingresar un numero entero: ")
+
+            try:
+                int(num) #revisa si el valor ingresado se puede transformar en entero
+                self.lista.append(int(num))
+
+            except ValueError:
+                print("lo sentimos el valor ingresado no es un numero entero")
 
     def select_sort(self):
         ciclo = 0
@@ -18,52 +30,53 @@ class Nombre:
             print(f"en el ciclo {ciclo} se van a intercambiar los indices", end=" ")
             print(f"{i}, {aux} que tienen los valores {self.lista[i]}, {self.lista[aux]}")
 
-    def binary_serch(self):
-        number_to_serch = int(input("ingresar el numero a buscar: "))
-        low=0
-        high=len(self.lista)-1
-        mid=0
-        while low <= high :
-            mid = (high + low)//2
-            if self.lista[mid] < number_to_serch :
-                low = mid + 1
-            elif self.lista[mid] > number_to_serch: #buscar hacer que mustre los ind del num repetido
-                high = mid - 1 
-            else:
-                print(f"el numero {number_to_serch} se encuentra en la posicion {mid}")
-                return mid
-        return
-    
+        self.lista_ordenada = True
+
+
     def linear_search(self, search_num):
         lista_ind = []
-        for i  in range(0, len(self.lista)):
-             if self.lista[i] == search_num:
-                 lista_ind.append(i)
+        if search_num in self.lista:
+            for i  in range(0, len(self.lista)):
+                 if self.lista[i] == search_num:
+                     lista_ind.append(i)
 
-        print(f"el numero {search_num} esta en los indices:", end=" ")
-        for j in range(0, len(lista_ind)):
-            print(f"{lista_ind[j]}", end=" ")
+            print(f"el numero {search_num} esta en los indices:", end=" ")
+            for j in range(0, len(lista_ind)):
+                print(f"{lista_ind[j]}", end=" ")
+
+        else:
+            print(f"lo sentimos el numero {search_num} no pertenece a la lista")
+
+
+    def interfaz(self):
+        while True:
+            print("0:temino programa,  1:crear_lista,  2:ordenar_lista,  3:buscar_numero\n")
+            opcion = int(input("ingresar una opcion: "))
+            if opcion == 0:
+                print("termino del programa")
+                break
+            elif opcion == 1:
+                self.rellenar_lista(int(input("cantidad de numeros a agregar: ")))
+                print("\nla lista creada es:")
+                self.mostrar_lista()
+                input("\n")
+            elif opcion == 2:
+                self.select_sort()
+                print("\nla lista ordenada es:")
+                self.mostrar_lista()
+                input("\n")
+            elif opcion == 3:
+                if self.lista_ordenada:
+                    self.linear_search(int(input("ingresar el numero a buscar: ")))
+                    input("")
+                else:
+                    print("accion invalida, la lista no esta ordenada\n")
+                    input("")
 
 
     def mostrar_lista(self):
         print(self.lista)
 
 
-print("creacion de la lista")
-p1 = Nombre(int(input("cantidad de numeros a agregar: ")))
-input("")
-
-print("lista creada")
-p1.mostrar_lista()
-input("")
-
-print("ordenamiento de la lista")
-p1.select_sort()
-input("")
-
-print("lista ordenada")
-print(p1.lista)
-input("")
-
-print("buscar numero indicado")
-p1.linear_search(int(input("ingresar el numero a buscar: ")))
+p1 = Recuperatorio()
+p1.interfaz()
