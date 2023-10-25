@@ -1,6 +1,5 @@
 #cositas importantes
 #crear lista/ ordenar lista/ buscar numero
-
 class Recuperatorio:
     def __init__(self):
         self.lista = []
@@ -50,10 +49,15 @@ class Recuperatorio:
 
     def interfaz(self):
         while True:
-            print("0:temino programa,  1:crear_lista,  2:ordenar_lista,  3:buscar_numero\n")
+            print("-----------------------------------------------------------------------------------------------")
+            print("0:temino programa  /  1:crear_lista  /  2:ordenar_lista  /  3:buscar_numero")
+            print("-----------------------------------------------------------------------------------------------\n")
             opcion = (input("ingresar una opcion: "))
 
             if opcion == "":
+                print("porfavor ingresar una de las opciones\n")
+
+            elif opcion.isalpha():
                 print("porfavor ingresar una de las opciones\n")
 
             elif int(opcion) not in [0, 1, 2, 3]:
@@ -66,7 +70,7 @@ class Recuperatorio:
             elif int(opcion) == 1:
                 self.lista = []
                 self.lista_ordenada = False
-                self.rellenar_lista(int(input("cantidad de numeros a agregar: ")))
+                self.rellenar_lista(int(input("ingrese la cantidad maxima de NUMEROS ENTEROS que aceptara la lista: ")))
                 print("\nla lista creada es:")
                 self.mostrar_lista()
                 input("\n")
