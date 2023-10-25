@@ -1,9 +1,6 @@
 #cositas importantes
 #crear lista/ ordenar lista/ buscar numero
 
-from asyncio.windows_events import NULL
-
-
 class Recuperatorio:
     def __init__(self):
         self.lista = []
