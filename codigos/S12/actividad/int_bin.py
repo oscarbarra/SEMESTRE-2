@@ -9,7 +9,7 @@ def resto(numero, lista):
     return lista
 
 def num_binario(numero, lista):
-    binario = "0"
+    binario = ""
     concatenar = resto(numero, lista)
 
     for i in range(len(lista)-1, -1, -1):
@@ -19,6 +19,6 @@ def num_binario(numero, lista):
 
 
 lista =[]
-numero = int(input())
+numero = int(input("ingresar un numero NATURAL: "))
 
-print(num_binario(numero, lista))
+print(f"el numero {numero} en binario es: {num_binario(numero, lista)}")
