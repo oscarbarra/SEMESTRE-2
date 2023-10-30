@@ -21,14 +21,13 @@ def buscar_combinacion_monedas(monedas, indice, total, usar):
         buscar_combinacion_monedas(monedas, indice -1, total, usar)
 
 star_time = time.time()
-
-monedas_disponibles = [1, 2, 5] #tiene que estar ordenado de menor a mayor
+monedas_disponibles = [1, 2, 5, 10, 20] #tiene que estar ordenado de menor a mayor
 indice_mon_disp = len(monedas_disponibles) -1
 total_requerido = int(input("ingresar la cantidad deseada de dinero: "))
 monedas_usar = [] #almacenara las monedas minimas para alcanzar el total
 
 buscar_combinacion_monedas(monedas_disponibles, indice_mon_disp, total_requerido, monedas_usar)
-end_time = time.time()
 
+end_time = time.time()
 print(monedas_usar)
 print(f"tiempo de ejecucion {end_time -star_time}")
