@@ -17,8 +17,6 @@ def num_binario(numero, lista):
 
     return binario
 
-
 lista =[]
 numero = int(input("ingresar un numero NATURAL: "))
-
 print(f"el numero {numero} en binario es: {num_binario(numero, lista)}")

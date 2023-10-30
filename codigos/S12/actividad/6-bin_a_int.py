@@ -5,7 +5,6 @@ def binario_a_decimal(num, lista, indice, exponente):
 
     return sum(lista)
 
-
 num = (input("ingresar un numero BINARIO: "))
 indice = len(num)-1
 exponente = 0
