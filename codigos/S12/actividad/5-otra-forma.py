@@ -1,6 +1,6 @@
 def sumar_numeros_pares(numero):
     if numero >= 0 and numero %2 == 0:
-        return numero +sumar_numeros_pares(numero-2)
+        return numero +sumar_numeros_pares(numero -2)
     elif numero %2 == 1:
         return f"\nel numero {numero} no es par"
     else:
