@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>Tienda</title>
+		<link rel="stylesheet" href="../CSS/Producto.css" />
+	</head>
+	<body>
+		<header>
+            <img src="../logo.png" alt="">
+            <h1>RapiAlimentos</h1>
+            <nav>
+                <a href="../index.html">Inicio</a>
+                <a href="Productos.html">Productos</a>
+                <a href="Contacto.html">Contacto</a>
+                <a href="login.html">Login </a>
+            </nav>
+        
+			<div class="container-icon">
+				<div class="container-cart-icon">
+					<img src="../logo.png" >
+					<div class="count-products">
+						<span id="contador-productos">0</span>
+					</div>
+				</div>
+
+				<div class="container-cart-products hidden-cart">
+					<div class="row-product hidden">
+						<div class="cart-product">
+							<div class="info-cart-product">
+								<span class="cantidad-producto-carrito">1</span>
+								<p class="titulo-producto-carrito">Zapatos Nike</p>
+								<span class="precio-producto-carrito">$80</span>
+							</div>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1.5"
+								stroke="currentColor"
+								class="icon-close"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M6 18L18 6M6 6l12 12"
+								/>
+							</svg>
+						</div>
+					</div>
+
+					<div class="cart-total hidden">
+						<h3>Total:</h3>
+						<span class="total-pagar">$200</span>
+					</div>
+					<p class="cart-empty">El carrito está vacío</p>
+				</div>
+			</div>
+		</header>
+
+        <section>
+            <div>
+                <h2 id="cat">Alimentos</h2>
+            <div class="container-items">
+                <div class="producto">
+                    <figure>
+                        <img
+                            src="../img/papas.jpg"
+                            alt="producto"
+                        />
+                    </figure>
+                    <div class="info-product">
+                        <h2>Papas Lays</h2>
+                        <p class="price">$500</p>
+                        <button class="btn-add-cart">Añadir al carrito</button>
+                    </div>
+                </div>
+
+                <div class="producto">
+                    <div >
+                        <img
+                            src="../img/huevos.jpg"
+                            alt="producto"
+                        />
+                    </div>
+                    <div class="info-product">
+                        <h2>Huevos</h2>
+                        <p class="price">$1800</p>
+                        <button class="btn-add-cart">Añadir al carrito</button>
+                    </div>
+                </div>
+
+                <div class="producto">
+                    <figure>
+                        <img
+                            src="../img/leche.jpeg"
+                            alt="producto"
+                        />
+                    </figure>
+                    <div class="info-product">
+                        <h2>Leche colun</h2>
+                        <p class="price">$990</p>
+                        <button class="btn-add-cart">Añadir al carrito</button>
+                    </div>
+                </div>
+
+                <div class="producto">
+                        <img
+                            src="../img/pan.jpg"
+                            alt="producto"
+                        />
+                    <div class="info-product">
+                        <h2>pan</h2>
+                        <p class="price">$2000</p>
+                        <button class="btn-add-cart">Añadir al carrito</button>
+                    </div>
+                </div>
+
+                <div class="producto">
+                    <figure>
+                        <img
+                            src="../img/arroz-tucapel-1kg.jpg"
+                            alt="producto"
+                        />
+                    </figure>
+                    <div class="info-product">
+                        <h2>arroz tucapel 1kg</h2>
+                        <p class="price">$50</p>
+                        <button class="btn-add-cart">Añadir al carrito</button>
+                    </div>
+                </div>
+            </div>
+    
+            </div>
+            
+        </section>
+		
+		<script src="../JS/carrito.js"></script>
+	</body>
+</html>

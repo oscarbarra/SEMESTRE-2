@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../CSS/Contacto.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <nav>
+        <h1><a href="../index.php">RapiAlimento</a></h1>
+        <div class="Categorias">
+            <ul>
+                <li><a href="Categorias.html">Categorias</a></li>
+            </ul>
+        </div>
+        <div class="form-bar">
+            <form action="#" method="get">
+                <input type="text" id="barsearch" placeholder="     Que buscas?">
+            </form>
+        </div>
+        <div class="cart">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+            </svg>
+            <div class="cart-items">
+            
+            </div>
+        </div>
+        <div class="User">
+            <ul>
+                <li><a href="Contacto.html">Contacto</a></li>
+                <li><a href="login.html">Iniciar Sesion</a></li>
+            </ul>
+        </div>
+
+    </nav>
+    <div class="main-content">
+        <h2>Formulario</h2>
+        <form action="#" method="post" id="miFormulario">
+            <label for="Nombre">Nombre</label>
+            <input type="text" name="Nombre" id="Nombre" required placeholder="Ingrese su nombre" title="Se debe rellenar este campo">
+            
+            <label for="Correo">Correo</label>
+            <input type="text" name="Correo" id="Correo" required placeholder="Ingrese su correo electrónico" title="Se debe rellenar este campo">
+            
+            <label for="texto">Descripción</label>
+            <textarea name="texto" id="1" class="desc" cols="30" rows="4" required placeholder="Ingrese la Descripción" title="Se debe rellenar este campo"></textarea>
+            
+            <button type="submit" class="send">Enviar</button>
+        </form>
+    </div>
+    <div class="mensaje-container" id="mensaje" style="display: none;">
+        Hemos recibido su comentario, en breve le contestaremos.
+    </div>
+    
+    <footer>
+        <P>&copy; Copyright 2023 RapiAlimentos Derechos Reservados</P>
+    </footer>
+    <script src="../JS/contacto.js"></script>
+</body>
+</html>

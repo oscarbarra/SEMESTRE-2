@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - RapiAlimentos</title>
+    <link href="../CSS/Contacto.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <header>
+        <img src="../logo.png" alt="">
+        <h1>RapiAlimentos</h1>
+        <nav>
+            <a href="../index.html">Inicio</a>
+            <a href="Productos.html">Productos</a>
+            <a href="Carrito.html">Carrito</a>
+            <a href="Contacto.html">Contacto</a>
+        </nav>
+    </header>
+
+    <section class="contacto">
+        <div class="formulario">
+            <h2>Contacto con el Soporte</h2>
+            <form id="contactForm">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" required>
+
+                <label for="correo">Correo:</label>
+                <input type="email" id="correo" name="correo" required>
+
+                <label for="descripcion">Descripción del problema:</label>
+                <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+
+                <button type="submit">Enviar</button>
+            </form>
+            <div id="exitoMensaje" class="mensaje-exito">Su mensaje ha sido enviado con éxito, le responderemos en breve</div>
+        </div>
+
+        <div class="redes-sociales">
+            <h2>Redes Sociales</h2>
+            <ul>
+                <li>
+                    <a href="#" target="_blank">
+                        <img src="../img/facebook.jpeg" alt="Facebook">
+                        Facebook: RapiAlimentos
+                    </a>
+                </li>
+                <li>
+                    <a href="#" target="_blank">
+                        <img src="../img/twitter.jpeg" alt="Twitter">
+                        Twitter: RapiAlimentos
+                    </a>
+                </li>
+                <li>
+                    <a href="#" target="_blank">
+                        <img src="../img/instagram.jpeg" alt="Instagram">
+                        Instagram: RapiAlimentos
+                    </a>
+                </li>
+            </ul>
+        </div>        
+    </section>
+
+    <footer>
+        <p>Copyright © 2023. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="../JS/contacto.js"></script>
+</body>
+
+</html>

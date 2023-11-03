@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es"> 
+<head>
+    <link rel="stylesheet" href="../CSS/login.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - RapiAlimento</title>
+</head>
+<body>
+    <nav>
+        <h1><a href="../index.html">RapiAlimento</a></h1>
+        <div class="Categorias">
+            <ul>
+                <li><a href="Categorias.html">Categorías</a></li>
+            </ul>
+        </div>
+        <div class="form-bar">
+            <form action="#" method="get">
+                <input type="text" id="barsearch" placeholder="¿Qué buscas?">
+            </form>
+        </div>
+        <div class="cart">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+            </svg>
+            <div class="cart-items">
+            </div>
+        </div>
+        <div class="User">
+            <ul>
+                <li><a href="Contacto.html">Contacto</a></li>
+                <li><a href="login.html">Iniciar Sesión</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container" id="container">
+        <div class="form-container sign-up">
+            <form>
+                <h1>Crea una cuenta</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+                <span>Use su correo electronico de preferencia</span>
+                <input type="text" placeholder="Nombre">
+                <input type="email" placeholder="Correo Electronico">
+                <input type="password" placeholder="Contraseña">
+                <button>Registrarse</button>
+            </form>
+        </div>
+        <div class="form-container sign-in">
+            <form>
+                <h1>Iniciar Sesion</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+                <span>Use su correo electronico de preferencia</span>
+                <input type="email" placeholder="Correo Electronico">
+                <input type="password" placeholder="Contraseña">
+                <a href="#">¿Olvidaste tu contraseña?</a>
+                <button>Iniciar Sesion</button>
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>¡Bienvenido!</h1>
+                    <p>Inicie sesion para usar todas las funciones del sitio</p>
+                    <button class="hidden" id="login">Inicio Sesion</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>¡Bienvenido otra vez!</h1>
+                    <p>Registrese para usar todas las funciones y beneficios del sitio, vamos que esperas</p>
+                    <button class="hidden" id="register">Unete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; Copyright 2023 RapiAlimentos Derechos Reservados</p>
+    </footer>
+    <script src="../JS/login.js"></script>
+</body>
+</html>
