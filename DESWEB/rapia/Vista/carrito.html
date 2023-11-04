@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../CSS/Carrito.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <nav class="nav__display">
+        <div class="inicio">
+            <h1><a href="../index.html">RapiAlimento</a></h1>
+        </div>
+        
+        <div class="Categorias">
+            <ul>
+                <li><a href="Categorias.html">Categorias</a></li>
+            </ul>
+        </div>
+
+        <div class="form-bar">
+            <form action="#" method="get">
+                <input type="text" id="barsearch" placeholder="search">
+            </form>
+        </div>
+
+        <div class="cart__display">
+            <div class="cart__link">
+                <ul>
+                    <li><a href="carrito.html">Carrito</a></li>
+                </ul>
+            </div>
+            
+            <div class="cart">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                </svg>
+
+                <div class="cart-items">
+                    <p>carrito</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="User">
+            <ul>
+                <li><a href="Contacto.html">Contacto</a></li>
+            </ul>
+        </div>
+
+        <div class="User">
+            <ul>
+                <li><a href="login.html">Iniciar Sesion</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <h2 class="titulo-principal">Carrito</h2>
+        <div class="contenedor-carrito">
+            <p class="carrito-vacio">Tu carrito esta vacio</p>
+            
+            <div id="carrito-productos" class="carrito-productos">
+                
+                <div class="carrito-producto">
+                    <img class="carrito-producto-imagen" src="../manzana.jpg" alt="#">
+                    <div class="carrito-producto-titulo">
+                        <small>Titulo</small>
+                        <h3>manzana</h3>
+                    </div>
+                    <div class="carrito-producto-cantidad">
+                        <small>Cantidad</small>
+                        <p>1</p>
+                    </div>
+                    <div class="carrito-producto-precio">
+                        <small>Precio</small>
+                        <p>$500</p>
+                    </div>
+                    <div class="carrito-producto-subtotal">
+                        <small>Subtotal</small>
+                        <p>500</p>
+                    </div>
+                    <button class="carrito-producto-eliminar"><i class="bi bi-trash-fill"></i></button>
+                </div>
+            </div>
+
+            <div id="carrito-acciones"class="carrito-acciones">
+                <div class="carrito-acciones-izquierda">
+                    <button class="carrito-acciones-vaciar">Vaciar carrito</button>
+                </div>
+                <div class="carrito-acciones-derecha">
+                    <div class="carrito-acciones-total">
+                        <p>Total:</p>
+                        <p id="total">500</p>
+                    </div>
+                    <button class="carrito-acciones-comprar">Comprar ahora</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="../script.js"></script>
+    <script src="../carrito.js"></script>
+
+</body>
+</html>
