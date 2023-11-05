@@ -163,7 +163,6 @@ input{
 
 .carrito-vacio{
     color: #000;
-    display: none;
 }
 
 .carrito-productos{
@@ -240,6 +239,9 @@ input{
 
 }
 
+.disabled{
+    display: none;
+}
 /*-------------------------------------------------*/
 /*FIN CONFIGURACION MAIN*/
 /*-------------------------------------------------*/

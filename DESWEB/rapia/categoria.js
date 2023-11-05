@@ -47,7 +47,17 @@ function actualizaBotonesAgregar(){
     })
 }
 
-const productosCarrito = [];
+
+let productosCarrito;
+
+let productosEnCarritoALM = localStorage.getItem("productos-en-carrito");
+
+if (productosEnCarritoALM){
+    productosCarrito = JSON.parse(productosEnCarritoALM);
+} else {
+    productosCarrito = [];
+}
+
 
 function agregarAlCarrito(e) {
     const idBoton = e.currentTarget.id;
