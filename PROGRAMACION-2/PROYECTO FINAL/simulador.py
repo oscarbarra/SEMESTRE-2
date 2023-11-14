@@ -64,25 +64,25 @@ class Planta(Organismo):
     def fotosintesis():
         pass
 
-    def reproducirce():
+    def reproducirse():
         pass
 
 #minimo 3
 class Ambiente:
-    def __inti__(self, temperatura):
+    def __init__(self, temperatura):
         self.temepratura = temperatura
 
-    # estaciones del año
-    def verano():
+    # estados del clima 
+    def clima_soleado():
         pass
     
-    def otoño():
+    def clima_calido():
         pass
 
-    def invierno():
+    def clima_frio():
         pass
 
-    def primavera():
+    def clima_lluvia():
         pass
 
     # desastres naturales
@@ -92,8 +92,11 @@ class Ambiente:
     def errupcion_volcanica():
         pass
 
+    def meteorito():
+        pass
 
 
 #gestiona el comportamiento
 class Ecosistema:
-    pass
+    def __init__(self):
+        pass
