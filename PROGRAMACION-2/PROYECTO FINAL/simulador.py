@@ -1,9 +1,11 @@
 #proyecto final de progra 2 
 #hacer una interfas grafica con el comportamiento
 
+from email.mime import image
 import tkinter as tk
 from random import choice
 from random import randint
+from types import NoneType
 
 class Organismo:
     def __init__(self, vida, energia, velocidad, posicion):
@@ -216,7 +218,17 @@ class Interfaz(Ecosistema):
             for c in range(self.columna):
                 self.interfaz.create_rectangle(f *self.L_CUADRADO, c *self.L_CUADRADO, (f +1) *self.L_CUADRADO, (c +1) *self.L_CUADRADO, fill=self.mapa[f][c].color)
 
+    def dibujarOrganismos(self):
+        for f in range(self.fila):
+            for c in range(self.columna):
+                try:
+                    self.interfaz.create_image(f, c, image= self.mapa[f][c].animal.imagen)
+                
+                except AttributeError:
+                    pass
+
 interfaz = Interfaz()
 
 interfaz.dibujarTablero()
+interfaz.dibujarOrganismos()
 interfaz()
