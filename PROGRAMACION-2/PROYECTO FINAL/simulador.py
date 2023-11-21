@@ -1,7 +1,9 @@
 #proyecto final de progra 2 
 #hacer una interfas grafica con el comportamiento
 
+import tkinter as tk
 from random import choice
+from random import randint
 
 class Organismo:
     def __init__(self, vida, energia, velocidad, posicion):
@@ -75,9 +77,6 @@ class Animal(Organismo):
             else:
                 self.posicion[1] -= self.movimiento
 
-        pass 
-
-    #posiblemente lo borre
     def tomar_agua(self):
         pass
 
@@ -91,15 +90,27 @@ class Animal(Organismo):
         pass
 
 class Leon(Animal):
-    def __init__(self, imagen, vida, energia, velocidad, posicion, alimentacion, hambre, sed, sexo, movimiento, vision):
-        super().__init__(imagen, vida, energia, velocidad, posicion, alimentacion, hambre, sed, sexo, movimiento, vision)
+    def __init__(self):
+        self.imagen = "./imagenes/animales/leon"
+        self.vida = 2000
+        self.energia = 100
+        self.velocidad = 2
+        self.posicion = [randint(0, 9), randint(0, 9)]
+        self.alimentacion = "carnivoro"
+        self.hambre = 100
+        self.sed = 100
+        self.sexo = choice(("macho", "hembra"))
+        self.movimiento = 2
+        self.vision= 2
+        
+        super().__init__(self.imagen, self.vida, self.energia, self.velocidad, self.posicion, self.alimentacion, self.hambre, self.sed, self.sexo, self.movimiento, self.vision)
 
     def cazar(self):
         pass
 
 class Conejo(Animal):
-    def __init__(self, imagen, vida, energia, velocidad, posicion, alimentacion, hambre, sed, sexo, movimiento, vision):
-        super().__init__(imagen, vida, energia, velocidad, posicion, alimentacion, hambre, sed, sexo, movimiento, vision)
+    def __init__(self):
+        pass
 
     def huir(self):
         pass
@@ -147,60 +158,65 @@ class Ambiente:
         pass
 
 class Habitat:
-    def __init__(self, color, animal, planta, posicion):
-        self.color = color
-        self.animal = animal
-        self.planta = planta
+    def __init__(self, posicion):
+        #esencia del habitat
+        self.color = choice(("#F7E505", "#3CC600", "#FFFFFF"))
+
+        #posicion del habitat
         self.posicion = posicion
+
+        #animal que esta en el habitat
+        self.animal = None
+
+        #planta que esta en el habitat
+        self.planta = None
 
 #gestiona el comportamiento
 class Ecosistema:
-    def __init__(self, animales, plantas):
+    def __init__(self):
         self.fila = 10
         self.columna = 10
-        self.mapa = []
-        self.animales = animales
-        self.plantas = plantas
+        self.habitat = None
+        self.mapa = [[ "_" for c in range(self.columna)] for f in range(self.fila)]
+        self.animales = None
+        self.plantas = None
+
+    def creaMapa(self):
+        for f in range(self.fila):
+            for c in range(self.columna):
+                self.habitat = Habitat([f,c])
+                self.mapa[f][c] = self.habitat
 
     def muestraMapa(self):
         for f in range(self.fila):
             for c in range(self.columna):
-                print(self.mapa[f][c].color, end="   ")
+                print(self.mapa[f][c].color, end="    ")
             print("\n")
 
-    def pintaMapa(self):
+class Interfaz(Ecosistema):
+    def __init__(self):
+        super().__init__()
+        super().creaMapa()
+        
+        self.L_CUADRADO = 50
+
+        self.ventana = tk.Tk()
+        self.ventana.title("ajedrez")
+        self.ventana.geometry(f"{str(self.L_CUADRADO *self.columna)}x{str(self.L_CUADRADO *self.fila)}")
+
+        self.interfaz = tk.Canvas(self.ventana)
+        self.interfaz.pack(fill="both", expand=True)
+
+    def __call__(self):
+        self.ventana.mainloop()
+
+    def dibujarTablero(self):
+        #self.interfaz.create_rectangle(x0, y0, x1, y1, fill=)
         for f in range(self.fila):
-            self.mapa.append([])
             for c in range(self.columna):
-                habiat = Habitat(choice(("amarillo", "verde", "blanco")), "", 0, "")
-                self.mapa[f].append(habiat)
+                self.interfaz.create_rectangle(f *self.L_CUADRADO, c *self.L_CUADRADO, (f +1) *self.L_CUADRADO, (c +1) *self.L_CUADRADO, fill=self.mapa[f][c].color)
 
-    def rellenoMapa(self):
-        if len(self.animales) != 0:
-            for animal in self.animales:
-                self.mapa[animal.posicion[0]][animal.posicion[1]].animal = animal
-                self.mapa[animal.posicion[0]][animal.posicion[1]].posicion = animal.posicion
+interfaz = Interfaz()
 
-        if len(self.plantas) != 0:
-            for planta in self.plantas:
-                self.mapa[planta.posicion[0]][planta.posicion[1]].planta = planta
-                self.mapa[planta.posicion[0]][planta.posicion[1]].posicion = planta.posicion
-
-#animales de la simulacion
-#imagen, vida, energia, velocidad, posicion, alimentacion, hambre, sed, sexo, movimiento, vision 
-leon_1 = Leon("L1", 1000, 100, 2, [0, 0], "carnivoro", 100, 100, choice(("macho", "hembra")), 2, 3)
-leon_2 = Leon("L2", 1000, 100, 2, [9, 9], "carnivoro", 100, 100, choice(("macho", "hembra")), 2, 3)
-
-ecosistema = Ecosistema([leon_1, leon_2], [])
-
-while True:
-    ecosistema.pintaMapa()
-    ecosistema.rellenoMapa() 
-    ecosistema.muestraMapa()
-
-    ecosistema.animales[0].moverse(ecosistema.fila, ecosistema.columna)
-    print(ecosistema.animales[0].posicion)
-
-    fin = int(input("numero: "))
-    if fin == 0:
-        break
+interfaz.dibujarTablero()
+interfaz()
