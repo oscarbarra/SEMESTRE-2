@@ -21,7 +21,7 @@ class Organismo:
 
 #minimo 10
 class Animal(Organismo):
-    def __init__(self,imagen, vida, energia, velocidad, posicion,alimentacion, hambre, sed, sexo, movimiento, vision):
+    def __init__(self, imagen, vida, energia, velocidad, posicion,alimentacion, hambre, sed, sexo, movimiento, vision):
         super().__init__(vida, energia, velocidad, posicion)
 
         self.imagen = imagen
@@ -91,7 +91,7 @@ class Animal(Organismo):
 
 class Leon(Animal):
     def __init__(self):
-        self.imagen = "./imagenes/animales/leon"
+        self.imagen = None
         self.vida = 2000
         self.energia = 100
         self.velocidad = 2
@@ -117,8 +117,10 @@ class Conejo(Animal):
 
 #minimo 5
 class Planta(Organismo):
-    def __init__(self, vida, energia, velocidad, posicion):
+    def __init__(self, imagen, vida, energia, velocidad, posicion):
         super().__init__(vida, energia, velocidad, posicion)
+
+        self.imagen = imagen
 
     def fotosintesis(self):
         pass
@@ -128,6 +130,16 @@ class Planta(Organismo):
 
     def morir(self):
         pass
+
+class Zanahoria(Planta):
+    def __init__(self):
+        self.imagen = None
+        self.vida = 100
+        self.energia = 100
+        self.velocidad = 2
+        self.posicion = [randint(0, 9), randint(0, 9)]
+
+        super().__init__(self.imagen, self.vida, self.energia,self.velocidad, self.posicion)
 
 #minimo 3
 class Ambiente:
@@ -198,12 +210,14 @@ class Interfaz(Ecosistema):
         super().__init__()
         super().creaMapa()
         
-        self.L_CUADRADO = 50
+        self.L_CUADRADO = 32
         self.imagenesAnimales = {}
+        self.imagenesPlantas = {}
 
         self.ventana = tk.Tk()
         self.ventana.title("ajedrez")
         self.ventana.geometry(f"{str(self.L_CUADRADO *self.columna)}x{str(self.L_CUADRADO *self.fila)}")
+        self.ventana.resizable(0, 0)
 
         self.interfaz = tk.Canvas(self.ventana)
         self.interfaz.pack(fill="both", expand=True)
@@ -220,17 +234,35 @@ class Interfaz(Ecosistema):
 
     def cargarImagenesAnimales(self):
         imagenesAnimales = ["cerdo", "conejo", "leon", "tigre"]
-        for img in imagenesAnimales:
-            self.imagenesAnimales[img] = tk.PhotoImage(file="./imagenes/animales/" + img + ".png")
 
-    def dibujarOrganismos(self):
-        self.mapa[0][0].animal = Leon()
-        self.mapa[0][0].animal.imagen = self.imagenesAnimales["leon"]
+        for img in imagenesAnimales:
+            self.imagenesAnimales[img] = tk.PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\imagenes\{str('animales')}\{str(img)}.png")
+
+    def cargarImagenasPlantas(self):
+        imagenesPlantas = ["zanahoria"]
+
+        for img in imagenesPlantas:
+            self.imagenesPlantas[img] = tk.PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\imagenes\{str('plantas')}\{str(img)}.png")
+
+    def dibujarAnimales(self):
+        self.mapa[1][5].animal = Leon()
+        self.mapa[1][5].animal.imagen = self.imagenesAnimales["cerdo"]
         for f in range(self.fila):
             for c in range(self.columna):
-                try:
-                    self.interfaz.create_image(f, c, image= self.mapa[f][c].animal.imagen, anchor="nw")
-                
+                try:                          # cord x, cord y, image
+                    self.interfaz.create_image(c *self.L_CUADRADO, f *self.L_CUADRADO, image= self.mapa[f][c].animal.imagen, anchor="nw")
+
+                except AttributeError:
+                    pass
+
+    def dibujarPlantas(self):
+        self.mapa[1][6].planta = Zanahoria()
+        self.mapa[1][6].planta.imagen = self.imagenesPlantas["zanahoria"]
+        for f in range(self.fila):
+            for c in range(self.columna):
+                try:                          # cord x, cord y, image
+                    self.interfaz.create_image(c *self.L_CUADRADO, f *self.L_CUADRADO, image= self.mapa[f][c].planta.imagen, anchor="nw")
+
                 except AttributeError:
                     pass
 
@@ -238,5 +270,8 @@ interfaz = Interfaz()
 
 interfaz.dibujarTablero()
 interfaz.cargarImagenesAnimales()
-interfaz.dibujarOrganismos()
+interfaz.cargarImagenasPlantas()
+interfaz.dibujarAnimales()
+interfaz.dibujarPlantas()
+
 interfaz()
