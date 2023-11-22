@@ -1,11 +1,9 @@
 #proyecto final de progra 2 
 #hacer una interfas grafica con el comportamiento
 
-from email.mime import image
 import tkinter as tk
 from random import choice
 from random import randint
-from types import NoneType
 
 class Organismo:
     def __init__(self, vida, energia, velocidad, posicion):
@@ -201,6 +199,7 @@ class Interfaz(Ecosistema):
         super().creaMapa()
         
         self.L_CUADRADO = 50
+        self.imagenesAnimales = {}
 
         self.ventana = tk.Tk()
         self.ventana.title("ajedrez")
@@ -208,6 +207,7 @@ class Interfaz(Ecosistema):
 
         self.interfaz = tk.Canvas(self.ventana)
         self.interfaz.pack(fill="both", expand=True)
+        
 
     def __call__(self):
         self.ventana.mainloop()
@@ -218,11 +218,18 @@ class Interfaz(Ecosistema):
             for c in range(self.columna):
                 self.interfaz.create_rectangle(f *self.L_CUADRADO, c *self.L_CUADRADO, (f +1) *self.L_CUADRADO, (c +1) *self.L_CUADRADO, fill=self.mapa[f][c].color)
 
+    def cargarImagenesAnimales(self):
+        imagenesAnimales = ["cerdo", "conejo", "leon", "tigre"]
+        for img in imagenesAnimales:
+            self.imagenesAnimales[img] = tk.PhotoImage(file="./imagenes/animales/" + img + ".png")
+
     def dibujarOrganismos(self):
+        self.mapa[0][0].animal = Leon()
+        self.mapa[0][0].animal.imagen = self.imagenesAnimales["leon"]
         for f in range(self.fila):
             for c in range(self.columna):
                 try:
-                    self.interfaz.create_image(f, c, image= self.mapa[f][c].animal.imagen)
+                    self.interfaz.create_image(f, c, image= self.mapa[f][c].animal.imagen, anchor="nw")
                 
                 except AttributeError:
                     pass
@@ -230,5 +237,6 @@ class Interfaz(Ecosistema):
 interfaz = Interfaz()
 
 interfaz.dibujarTablero()
+interfaz.cargarImagenesAnimales()
 interfaz.dibujarOrganismos()
 interfaz()
