@@ -1,10 +1,8 @@
 #proyecto final de progra 2 
 #hacer una interfas grafica con el comportamiento
 
-import tkinter as tk
-from tkinter import ttk
-from random import choice
-from random import randint
+from tkinter import Tk, Canvas, PhotoImage, ttk
+from random import choice, randint
 
 class Organismo:
     def __init__(self, vida, energia, velocidad, posicion):
@@ -20,6 +18,9 @@ class Organismo:
         # donde esta en la simulacion
         self.posicion = posicion
 
+#---------------------------------------------------
+#Animales de la simulacion
+#---------------------------------------------------
 #minimo 10
 class Animal(Organismo):
     def __init__(self, imagen, vida, energia, velocidad, posicion,alimentacion, hambre, sed, sexo, movimiento, vision):
@@ -45,38 +46,37 @@ class Animal(Organismo):
         # determina cuanto puede ver
         self.vision = vision
 
-    def moverse(self, fila, columna):
+    def actualizaPosicion(self, fila, columna):
         direcciones = ["arriba", "abajo", "izquierda", "derecha"]
         direccionEscogida = choice(direcciones)
 
-        print(direccionEscogida)
         if direccionEscogida == "arriba":
-            if self.posicion[0] - self.movimiento >= 0:
-                self.posicion[0] -= self.movimiento
+            if self.posicion[0] - (40 *self.movimiento) -40 >= 0:
+                self.posicion[0] -= (40 *self.movimiento) -40
 
             else:
-                self.posicion[0] += self.movimiento
+                self.posicion[0] += (40 *self.movimiento) -40
 
         if direccionEscogida == "abajo":
-            if self.posicion[0] + self.movimiento <= fila:
-                self.posicion[0] += self.movimiento
+            if self.posicion[0] + (40 *self.movimiento) -40 <= fila:
+                self.posicion[0] += (40 *self.movimiento) -40
 
             else:
-                self.posicion[0] -= self.movimiento
+                self.posicion[0] -= (40 *self.movimiento) -40
 
         if direccionEscogida == "izquierda":
-            if self.posicion[1] - self.movimiento >= 0:
-                self.posicion[1] -= self.movimiento
+            if self.posicion[1] - (40 *self.movimiento) -40 >= 0:
+                self.posicion[1] -= (40 *self.movimiento) -40
 
             else:
-                self.posicion[1] += self.movimiento
+                self.posicion[1] += (40 *self.movimiento) -40
 
         if direccionEscogida == "derecha":
-            if self.posicion[1] + self.movimiento <= columna:
-                self.posicion[1] += self.movimiento
+            if self.posicion[1] + (40 *self.movimiento) -40 <= columna:
+                self.posicion[1] += (40 *self.movimiento) -40
 
             else:
-                self.posicion[1] -= self.movimiento
+                self.posicion[1] -= (40 *self.movimiento) -40
 
     def tomar_agua(self):
         pass
@@ -92,11 +92,14 @@ class Animal(Organismo):
 
 class Leon(Animal):
     def __init__(self):
-        self.imagen = None
+        self.nombre = "leon"
+        self.imagen = PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\{str('imagenes')}\{str('animales')}\{str('leon')}.png")
+
+        #atributos
         self.vida = 2000
         self.energia = 100
         self.velocidad = 2
-        self.posicion = [randint(0, 9), randint(0, 9)]
+        self.posicion = [40 *randint(0, 9),40 *randint(0, 9)]
         self.alimentacion = "carnivoro"
         self.hambre = 100
         self.sed = 100
@@ -116,6 +119,9 @@ class Conejo(Animal):
     def huir(self):
         pass
 
+#---------------------------------------------------
+#Plantas de la simulacion
+#---------------------------------------------------
 #minimo 5
 class Planta(Organismo):
     def __init__(self, imagen, vida, energia, velocidad, posicion):
@@ -170,112 +176,109 @@ class Ambiente:
     def meteorito(self):
         pass
 
+#---------------------------------------------------
+#Habitats de la simulacion
+#---------------------------------------------------
 class Habitat:
-    def __init__(self, posicion):
+    def __init__(self):
         #esencia del habitat
         self.color = choice(("#F7E505", "#3CC600", "#FFFFFF"))
 
         #posicion del habitat
-        self.posicion = posicion
+        self.cuadrado = None
 
         #animal que esta en el habitat
         self.animal = None
 
+        self.imagenPrincipalAnimal = None
+
         #planta que esta en el habitat
         self.planta = None
+        
+        self.imagenPrincipalPlanta = None
 
-#gestiona el comportamiento
+#---------------------------------------------------
+#Ecosistema regulador de la simalucaion
+#---------------------------------------------------
 class Ecosistema:
     def __init__(self):
         self.fila = 10
         self.columna = 10
         self.habitat = None
         self.mapa = [[ "_" for c in range(self.columna)] for f in range(self.fila)]
-        self.animales = None
-        self.plantas = None
 
     def creaMapa(self):
         for f in range(self.fila):
             for c in range(self.columna):
-                self.habitat = Habitat([f,c])
+                self.habitat = Habitat()
                 self.mapa[f][c] = self.habitat
 
-    def muestraMapa(self):
+    def creaAnimales(self):
         for f in range(self.fila):
             for c in range(self.columna):
-                print(self.mapa[f][c].color, end="    ")
-            print("\n")
+                self.mapa[f][c].animal = choice((Leon(), None, None, None, None))
 
+    def actualizaPosicionAnimales(self):
+        for f in range(self.fila):
+            for c in range(self.columna):
+                try:
+                    print(self.mapa[f][c].animal.posicion)
+                    self.mapa[f][c].animal.actualizaPosicion(f, c)
+                    print(self.mapa[f][c].animal.posicion)
+                except AttributeError:
+                    pass
+#---------------------------------------------------
+#Interfaz de la simulacion
+#---------------------------------------------------
 class Interfaz(Ecosistema):
     def __init__(self):
         super().__init__()
         super().creaMapa()
-        
-        self.L_CUADRADO = 40
-        self.imagenesAnimales = {}
-        self.imagenesPlantas = {}
 
-        self.ventana = tk.Tk()
+        self.L_CUADRADO = 40
+
+        self.ventana = Tk()
         self.ventana.title("ajedrez")
         self.ventana.geometry(f"{str(self.L_CUADRADO *self.columna)}x{str(self.L_CUADRADO *self.fila +30)}")
         #self.ventana.resizable(0, 0)
 
-        self.interfaz = tk.Canvas(self.ventana)
+        self.interfaz = Canvas(self.ventana)
         self.interfaz.pack(fill="both", expand=True)
         
+        super().creaAnimales()
 
     def __call__(self):
         self.ventana.mainloop()
 
-    def cargarImagenesAnimales(self):
-        imagenesAnimales = ["cerdo", "conejo", "leon", "tigre"]
-
-        for img in imagenesAnimales:
-            self.imagenesAnimales[img] = tk.PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\{str('imagenes')}\{str('animales')}\{str(img)}.png")
-
-    def cargarImagenasPlantas(self):
-        imagenesPlantas = ["zanahoria"]
-
-        for img in imagenesPlantas:
-            self.imagenesPlantas[img] = tk.PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\{str('imagenes')}\{str('plantas')}\{str(img)}.png")
-
-    def dibujarAnimales(self, l=1):
-        self.mapa[l][5].animal = Leon()
-        self.mapa[l][5].animal.imagen = self.imagenesAnimales["leon"]
+    def dibujarAnimales(self):
+        self.mapa[0][0].animal = Leon()
+        self.mapa[0][0].animal.imagen = PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\{str('imagenes')}\{str('animales')}\{str('tigre')}.png")
         for f in range(self.fila):
             for c in range(self.columna):
-                try:                          # cord x, cord y, image
-                    self.interfaz.create_image((c *self.L_CUADRADO) +4, (f *self.L_CUADRADO) +4, image= self.mapa[f][c].animal.imagen, anchor="nw")
-
+                try:
+                    self.mapa[f][c].imagenPrincipalAnimal = self.interfaz.create_image(self.mapa[f][c].animal.posicion[1] +4, self.mapa[f][c].animal.posicion[0] +4, image = self.mapa[f][c].animal.imagen, anchor="nw")
                 except AttributeError:
                     pass
-
-    def dibujarPlantas(self):
-        self.mapa[1][6].planta = Zanahoria()
-        self.mapa[1][6].planta.imagen = self.imagenesPlantas["zanahoria"]
+                
+    def actualizaImagenesAnimales(self):
         for f in range(self.fila):
             for c in range(self.columna):
-                try:                          # cord x, cord y, image
-                    self.interfaz.create_image((c *self.L_CUADRADO) +4, (f *self.L_CUADRADO) +4, image= self.mapa[f][c].planta.imagen, anchor="nw")
-
+                try:
+                    self.interfaz.move(self.mapa[f][c].imagenPrincipalAnimal, self.mapa[f][c].animal.posicion[1], self.mapa[f][c].animal.posicion[0])
                 except AttributeError:
-                    pass
+                    continue
 
     def dibujarTablero(self):
         #self.interfaz.create_rectangle(x0, y0, x1, y1, fill=)
-        for f in range(self.fila):
-            for c in range(self.columna):
-                self.interfaz.create_rectangle(f *self.L_CUADRADO, c *self.L_CUADRADO, (f +1) *self.L_CUADRADO, (c +1) *self.L_CUADRADO, fill=self.mapa[f][c].color)
+        for y in range(self.fila):
+            for x in range(self.columna):
+                self.interfaz.create_rectangle(x *self.L_CUADRADO, y *self.L_CUADRADO, (x +1) *self.L_CUADRADO, (y +1) *self.L_CUADRADO, fill=self.mapa[y][x].color)
 
-        boton = ttk.Button(text="siguiente ciclo", width=66, command=lambda: (self.dibujarTablero(), self.dibujarAnimales(5), self.dibujarPlantas()))
+        boton = ttk.Button(text="siguiente ciclo", width=66, command= lambda: (self.actualizaPosicionAnimales(), self.actualizaImagenesAnimales()))
         boton.place(x=0, y=402)
 
 interfaz = Interfaz()
 
 interfaz.dibujarTablero()
-interfaz.cargarImagenesAnimales()
-interfaz.cargarImagenasPlantas()
 interfaz.dibujarAnimales()
-interfaz.dibujarPlantas()
-
 interfaz()
