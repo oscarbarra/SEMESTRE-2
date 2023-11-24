@@ -51,32 +51,32 @@ class Animal(Organismo):
         direccionEscogida = choice(direcciones)
 
         if direccionEscogida == "arriba":
-            if self.posicion[0] - (40 *self.movimiento) -40 >= 0:
-                self.posicion[0] -= (40 *self.movimiento) -40
+            if self.posicion[0] - (40 *self.movimiento) >= 0:
+                self.posicion[0] -= (40 *self.movimiento)
 
             else:
-                self.posicion[0] += (40 *self.movimiento) -40
+                self.posicion[0] += (40 *self.movimiento)
 
         if direccionEscogida == "abajo":
-            if self.posicion[0] + (40 *self.movimiento) -40 <= fila:
-                self.posicion[0] += (40 *self.movimiento) -40
+            if self.posicion[0] + (40 *self.movimiento) <= 400:
+                self.posicion[0] += (40 *self.movimiento)
 
             else:
-                self.posicion[0] -= (40 *self.movimiento) -40
+                self.posicion[0] -= (40 *self.movimiento)
 
         if direccionEscogida == "izquierda":
-            if self.posicion[1] - (40 *self.movimiento) -40 >= 0:
-                self.posicion[1] -= (40 *self.movimiento) -40
+            if self.posicion[1] - (40 *self.movimiento) >= 0:
+                self.posicion[1] -= (40 *self.movimiento)
 
             else:
-                self.posicion[1] += (40 *self.movimiento) -40
+                self.posicion[1] += (40 *self.movimiento)
 
         if direccionEscogida == "derecha":
-            if self.posicion[1] + (40 *self.movimiento) -40 <= columna:
-                self.posicion[1] += (40 *self.movimiento) -40
+            if self.posicion[1] + (40 *self.movimiento) <= 800:
+                self.posicion[1] += (40 *self.movimiento)
 
             else:
-                self.posicion[1] -= (40 *self.movimiento) -40
+                self.posicion[1] -= (40 *self.movimiento)
 
     def tomar_agua(self):
         pass
@@ -99,7 +99,7 @@ class Leon(Animal):
         self.vida = 2000
         self.energia = 100
         self.velocidad = 2
-        self.posicion = [40 *randint(0, 9),40 *randint(0, 9)]
+        self.posicion = [40 *randint(0, 9),40 *randint(0, 20)]
         self.alimentacion = "carnivoro"
         self.hambre = 100
         self.sed = 100
@@ -114,7 +114,10 @@ class Leon(Animal):
 
 class Conejo(Animal):
     def __init__(self):
-        pass
+        self.nombre = "conejo"
+        self.imagen = PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\{str('imagenes')}\{str('animales')}\{str('conejo')}.png")
+
+        self.posicion = [40 *randint(0, 9),40 *randint(0, 20)]
 
     def huir(self):
         pass
@@ -203,7 +206,7 @@ class Habitat:
 class Ecosistema:
     def __init__(self):
         self.fila = 10
-        self.columna = 10
+        self.columna = 20
         self.habitat = None
         self.mapa = [[ "_" for c in range(self.columna)] for f in range(self.fila)]
 
@@ -216,15 +219,13 @@ class Ecosistema:
     def creaAnimales(self):
         for f in range(self.fila):
             for c in range(self.columna):
-                self.mapa[f][c].animal = choice((Leon(), None, None, None, None))
+                self.mapa[f][c].animal = choice((Leon(), Conejo(),None, None, None, None, None, None))
 
     def actualizaPosicionAnimales(self):
         for f in range(self.fila):
             for c in range(self.columna):
                 try:
-                    print(self.mapa[f][c].animal.posicion)
                     self.mapa[f][c].animal.actualizaPosicion(f, c)
-                    print(self.mapa[f][c].animal.posicion)
                 except AttributeError:
                     pass
 #---------------------------------------------------
@@ -251,6 +252,7 @@ class Interfaz(Ecosistema):
         self.ventana.mainloop()
 
     def dibujarAnimales(self):
+        self.mapa[0][0] = Habitat()
         self.mapa[0][0].animal = Leon()
         self.mapa[0][0].animal.imagen = PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\{str('imagenes')}\{str('animales')}\{str('tigre')}.png")
         for f in range(self.fila):
@@ -261,12 +263,9 @@ class Interfaz(Ecosistema):
                     pass
                 
     def actualizaImagenesAnimales(self):
-        for f in range(self.fila):
-            for c in range(self.columna):
-                try:
-                    self.interfaz.move(self.mapa[f][c].imagenPrincipalAnimal, self.mapa[f][c].animal.posicion[1], self.mapa[f][c].animal.posicion[0])
-                except AttributeError:
-                    continue
+        self.interfaz.delete("all")
+        self.dibujarTablero()
+        self.dibujarAnimales()
 
     def dibujarTablero(self):
         #self.interfaz.create_rectangle(x0, y0, x1, y1, fill=)
@@ -274,7 +273,7 @@ class Interfaz(Ecosistema):
             for x in range(self.columna):
                 self.interfaz.create_rectangle(x *self.L_CUADRADO, y *self.L_CUADRADO, (x +1) *self.L_CUADRADO, (y +1) *self.L_CUADRADO, fill=self.mapa[y][x].color)
 
-        boton = ttk.Button(text="siguiente ciclo", width=66, command= lambda: (self.actualizaPosicionAnimales(), self.actualizaImagenesAnimales()))
+        boton = ttk.Button(text="siguiente ciclo", width=66, command= lambda: (self.actualizaImagenesAnimales()))
         boton.place(x=0, y=402)
 
 interfaz = Interfaz()
