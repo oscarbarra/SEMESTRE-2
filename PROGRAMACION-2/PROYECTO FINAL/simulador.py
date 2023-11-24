@@ -2,6 +2,7 @@
 #hacer una interfas grafica con el comportamiento
 
 import tkinter as tk
+from tkinter import ttk
 from random import choice
 from random import randint
 
@@ -210,14 +211,14 @@ class Interfaz(Ecosistema):
         super().__init__()
         super().creaMapa()
         
-        self.L_CUADRADO = 32
+        self.L_CUADRADO = 40
         self.imagenesAnimales = {}
         self.imagenesPlantas = {}
 
         self.ventana = tk.Tk()
         self.ventana.title("ajedrez")
-        self.ventana.geometry(f"{str(self.L_CUADRADO *self.columna)}x{str(self.L_CUADRADO *self.fila)}")
-        self.ventana.resizable(0, 0)
+        self.ventana.geometry(f"{str(self.L_CUADRADO *self.columna)}x{str(self.L_CUADRADO *self.fila +30)}")
+        #self.ventana.resizable(0, 0)
 
         self.interfaz = tk.Canvas(self.ventana)
         self.interfaz.pack(fill="both", expand=True)
@@ -226,31 +227,25 @@ class Interfaz(Ecosistema):
     def __call__(self):
         self.ventana.mainloop()
 
-    def dibujarTablero(self):
-        #self.interfaz.create_rectangle(x0, y0, x1, y1, fill=)
-        for f in range(self.fila):
-            for c in range(self.columna):
-                self.interfaz.create_rectangle(f *self.L_CUADRADO, c *self.L_CUADRADO, (f +1) *self.L_CUADRADO, (c +1) *self.L_CUADRADO, fill=self.mapa[f][c].color)
-
     def cargarImagenesAnimales(self):
         imagenesAnimales = ["cerdo", "conejo", "leon", "tigre"]
 
         for img in imagenesAnimales:
-            self.imagenesAnimales[img] = tk.PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\imagenes\{str('animales')}\{str(img)}.png")
+            self.imagenesAnimales[img] = tk.PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\{str('imagenes')}\{str('animales')}\{str(img)}.png")
 
     def cargarImagenasPlantas(self):
         imagenesPlantas = ["zanahoria"]
 
         for img in imagenesPlantas:
-            self.imagenesPlantas[img] = tk.PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\imagenes\{str('plantas')}\{str(img)}.png")
+            self.imagenesPlantas[img] = tk.PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\{str('imagenes')}\{str('plantas')}\{str(img)}.png")
 
-    def dibujarAnimales(self):
-        self.mapa[1][5].animal = Leon()
-        self.mapa[1][5].animal.imagen = self.imagenesAnimales["cerdo"]
+    def dibujarAnimales(self, l=1):
+        self.mapa[l][5].animal = Leon()
+        self.mapa[l][5].animal.imagen = self.imagenesAnimales["leon"]
         for f in range(self.fila):
             for c in range(self.columna):
                 try:                          # cord x, cord y, image
-                    self.interfaz.create_image(c *self.L_CUADRADO, f *self.L_CUADRADO, image= self.mapa[f][c].animal.imagen, anchor="nw")
+                    self.interfaz.create_image((c *self.L_CUADRADO) +4, (f *self.L_CUADRADO) +4, image= self.mapa[f][c].animal.imagen, anchor="nw")
 
                 except AttributeError:
                     pass
@@ -261,10 +256,19 @@ class Interfaz(Ecosistema):
         for f in range(self.fila):
             for c in range(self.columna):
                 try:                          # cord x, cord y, image
-                    self.interfaz.create_image(c *self.L_CUADRADO, f *self.L_CUADRADO, image= self.mapa[f][c].planta.imagen, anchor="nw")
+                    self.interfaz.create_image((c *self.L_CUADRADO) +4, (f *self.L_CUADRADO) +4, image= self.mapa[f][c].planta.imagen, anchor="nw")
 
                 except AttributeError:
                     pass
+
+    def dibujarTablero(self):
+        #self.interfaz.create_rectangle(x0, y0, x1, y1, fill=)
+        for f in range(self.fila):
+            for c in range(self.columna):
+                self.interfaz.create_rectangle(f *self.L_CUADRADO, c *self.L_CUADRADO, (f +1) *self.L_CUADRADO, (c +1) *self.L_CUADRADO, fill=self.mapa[f][c].color)
+
+        boton = ttk.Button(text="siguiente ciclo", width=66, command=lambda: (self.dibujarTablero(), self.dibujarAnimales(5), self.dibujarPlantas()))
+        boton.place(x=0, y=402)
 
 interfaz = Interfaz()
 
