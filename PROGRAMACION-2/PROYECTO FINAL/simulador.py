@@ -50,37 +50,23 @@ class Animal(Organismo):
         # determina cuanto puede ver
         self.vision = vision
 
-    def actualizaPosicion(self):
-        direcciones = ["arriba", "abajo", "izquierda", "derecha"]
-        direccionEscogida = choice(direcciones)
+    def actualizaPosicion(self, direccion, arriba, abajo, izquierda, derecha):
+        if self.alimentacion == "carnivoro":
+            if direccion == "arriba" and arriba is None:
+                if self.posicion[0] - (cuadrado *self.movimiento) >= 0:
+                    self.posicion[0] -= (cuadrado *self.movimiento)
 
-        if direccionEscogida == "arriba":
-            if self.posicion[0] - (cuadrado *self.movimiento) >= 0:
-                self.posicion[0] -= (cuadrado *self.movimiento)
+            elif direccion == "abajo" and abajo is None:
+                if self.posicion[0] + (cuadrado *self.movimiento) <= 360:
+                    self.posicion[0] += (cuadrado *self.movimiento)
 
-            else:
-                self.posicion[0] += (cuadrado *self.movimiento)
+            elif direccion == "izquierda" and izquierda is None:
+                if self.posicion[1] - (cuadrado *self.movimiento) >= 0:
+                    self.posicion[1] -= (cuadrado *self.movimiento)
 
-        if direccionEscogida == "abajo":
-            if self.posicion[0] + (cuadrado *self.movimiento) <= 360:
-                self.posicion[0] += (cuadrado *self.movimiento)
-
-            else:
-                self.posicion[0] -= (cuadrado *self.movimiento)
-
-        if direccionEscogida == "izquierda":
-            if self.posicion[1] - (cuadrado *self.movimiento) >= 0:
-                self.posicion[1] -= (cuadrado *self.movimiento)
-
-            else:
-                self.posicion[1] += (cuadrado *self.movimiento)
-
-        if direccionEscogida == "derecha":
-            if self.posicion[1] + (cuadrado *self.movimiento) <= 760:
-                self.posicion[1] += (cuadrado *self.movimiento)
-
-            else:
-                self.posicion[1] -= (cuadrado *self.movimiento)
+            elif direccion == "derecha" and derecha is None:
+                if self.posicion[1] + (cuadrado *self.movimiento) <= 760:
+                    self.posicion[1] += (cuadrado *self.movimiento)
 
 class Leon(Animal):
     def __init__(self, posicion):
@@ -239,15 +225,18 @@ class Habitat:
 class Ecosistema:
     def __init__(self):
         self.habitat = None
-        self.mapaPrincipal = [[ "_" for c in range(columna)] for f in range(fila)]
-        self.mapaSecundario = None
+        self.mapaPrincipal = [[ None for c in range(columna)] for f in range(fila)]
+        self.mapaSecundario = [[ None for c in range(columna)] for f in range(fila)]
 
     def creaMapa(self):
         for f in range(fila):
             for c in range(columna):
                 self.habitat = Habitat()
                 self.mapaPrincipal[f][c] = self.habitat
-        self.mapaSecundario = self.mapaPrincipal
+                self.mapaSecundario[f][c] = self.habitat
+
+    def limpiaMapaSecundario(self):
+        self.mapaSecundario = [[None for c in range(columna)] for f in range(fila)]
 
     def creaAnimales(self):
         for f in range(fila):
@@ -259,10 +248,31 @@ class Ecosistema:
         for f in range(fila):
             for c in range(columna):
                 try:
-                    self.mapaPrincipal[f][c].animal.actualizaPosicion()
-                    self.mapaSecundario[int(self.mapaPrincipal[f][c].animal.posicion[0] /cuadrado)][int(self.mapaPrincipal[f][c].animal.posicion[1] /cuadrado)].animal = self.mapaPrincipal[f][c].animal
+                    self.mapaPrincipal[f][c].animal.actualizaPosicion(choice(("arriba", "abajo", "izquierda", "derecha")), self.mapaSecundario[f -self.mapaSecundario[f][c].animal.movimiento][c].animal, self.mapaSecundario[f +self.mapaSecundario[f][c].animal.movimiento][c].animal, self.mapaSecundario[f][c -self.mapaSecundario[f][c].animal.movimiento].animal, self.mapaSecundario[f][c +self.mapaSecundario[f][c].animal.movimiento].animal)
+                    self.mapaSecundario[int(self.mapaPrincipal[f][c].animal.posicion[0] /40)][int(self.mapaPrincipal[f][c].animal.posicion[1] /40)] = self.mapaPrincipal[f][c]
                 except AttributeError:
-                    pass
+                    continue
+    def cantidadAnimalesPantalla(self):
+        contador = 0
+        for f in range(fila):
+            for c in range(columna):
+                try:
+                    if self.mapaSecundario[f][c].animal.nombre in ("leon", "tigre", "conejo", "cerdo"):
+                        contador +=1
+                except AttributeError:
+                    continue
+        print(contador)
+
+    def cantidadAnimalesTotales(self):
+        contador = 0
+        for f in range(fila):
+            for c in range(columna):
+                try:
+                    if self.mapaPrincipal[f][c].animal.nombre in ("leon", "tigre", "conejo", "cerdo"):
+                        contador +=1
+                except AttributeError:
+                    continue
+        print(contador)
 #---------------------------------------------------
 #Interfaz de la simulacion
 #---------------------------------------------------
@@ -291,11 +301,14 @@ class Interfaz(Ecosistema):
                     self.mapaSecundario[f][c].imagenPrincipalAnimal = self.interfaz.create_image(self.mapaSecundario[f][c].animal.posicion[1] +4, self.mapaSecundario[f][c].animal.posicion[0] +4, image = self.mapaSecundario[f][c].animal.imagen, anchor="nw", tags="animales")
                 except AttributeError:
                     continue
-                
+
     def actualizaImagenesAnimales(self):
         self.interfaz.delete("animales")
+
+        self.limpiaMapaSecundario()
         self.actualizaPosicionAnimales()
         self.dibujarAnimales()
+        self.cantidadAnimalesPantalla()
 
     def dibujarTablero(self):
         #self.interfaz.create_rectangle(x0, y0, x1, y1, fill=)
@@ -309,5 +322,6 @@ class Interfaz(Ecosistema):
 interfaz = Interfaz()
 interfaz.dibujarTablero()
 interfaz.dibujarAnimales()
+interfaz.cantidadAnimalesTotales()
 
 interfaz()
