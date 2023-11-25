@@ -4,6 +4,11 @@
 from tkinter import Tk, Canvas, PhotoImage, ttk
 from random import choice, randint
 
+#---------------------------------------------------
+#variables globales
+#---------------------------------------------------
+fila = 10; columna = 20
+
 class Organismo:
     def __init__(self, vida, energia, velocidad, posicion):
         self.vida = vida
@@ -46,7 +51,7 @@ class Animal(Organismo):
         # determina cuanto puede ver
         self.vision = vision
 
-    def actualizaPosicion(self, fila, columna):
+    def actualizaPosicion(self):
         direcciones = ["arriba", "abajo", "izquierda", "derecha"]
         direccionEscogida = choice(direcciones)
 
@@ -58,7 +63,7 @@ class Animal(Organismo):
                 self.posicion[0] += (40 *self.movimiento)
 
         if direccionEscogida == "abajo":
-            if self.posicion[0] + (40 *self.movimiento) <= 400:
+            if self.posicion[0] + (40 *self.movimiento) <= 360:
                 self.posicion[0] += (40 *self.movimiento)
 
             else:
@@ -72,7 +77,7 @@ class Animal(Organismo):
                 self.posicion[1] += (40 *self.movimiento)
 
         if direccionEscogida == "derecha":
-            if self.posicion[1] + (40 *self.movimiento) <= 800:
+            if self.posicion[1] + (40 *self.movimiento) <= 760:
                 self.posicion[1] += (40 *self.movimiento)
 
             else:
@@ -99,7 +104,7 @@ class Leon(Animal):
         self.vida = 2000
         self.energia = 100
         self.velocidad = 2
-        self.posicion = [40 *randint(0, 9),40 *randint(0, 20)]
+        self.posicion = [40 *randint(0, 9), 40 *randint(0, 19)]
         self.alimentacion = "carnivoro"
         self.hambre = 100
         self.sed = 100
@@ -117,15 +122,29 @@ class Conejo(Animal):
         self.nombre = "conejo"
         self.imagen = PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\{str('imagenes')}\{str('animales')}\{str('conejo')}.png")
 
-        self.posicion = [40 *randint(0, 9),40 *randint(0, 20)]
+        self.posicion = [40 *randint(0, 9), 40 *randint(0, 19)]
 
     def huir(self):
         pass
 
+class Cerdo(Animal):
+    def __init__(self):
+        self.nombre = "cerdo"
+        self.imagen = PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\{str('imagenes')}\{str('animales')}\{str('cerdo')}.png")
+
+        self.posicion = [40 *randint(0, 9), 40 *randint(0, 19)]
+
+class Tigre(Animal):
+    def __init__(self):
+        self.nombre = "tigre"
+        self.imagen = PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\{str('imagenes')}\{str('animales')}\{str('tigre')}.png")
+
+        self.posicion = [40 *randint(0, 9), 40 *randint(0, 19)]
+
 #---------------------------------------------------
-#Plantas de la simulacion
+#Plantas de la simulacion #minimo 5
 #---------------------------------------------------
-#minimo 5
+
 class Planta(Organismo):
     def __init__(self, imagen, vida, energia, velocidad, posicion):
         super().__init__(vida, energia, velocidad, posicion)
@@ -205,27 +224,25 @@ class Habitat:
 #---------------------------------------------------
 class Ecosistema:
     def __init__(self):
-        self.fila = 10
-        self.columna = 20
         self.habitat = None
-        self.mapa = [[ "_" for c in range(self.columna)] for f in range(self.fila)]
+        self.mapa = [[ "_" for c in range(columna)] for f in range(fila)]
 
     def creaMapa(self):
-        for f in range(self.fila):
-            for c in range(self.columna):
+        for f in range(fila):
+            for c in range(columna):
                 self.habitat = Habitat()
                 self.mapa[f][c] = self.habitat
 
     def creaAnimales(self):
-        for f in range(self.fila):
-            for c in range(self.columna):
-                self.mapa[f][c].animal = choice((Leon(), Conejo(),None, None, None, None, None, None))
+        for f in range(fila):
+            for c in range(columna):
+                self.mapa[f][c].animal = choice((Leon(), Conejo(),Tigre(), Cerdo(),None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None))
 
     def actualizaPosicionAnimales(self):
-        for f in range(self.fila):
-            for c in range(self.columna):
+        for f in range(fila):
+            for c in range(columna):
                 try:
-                    self.mapa[f][c].animal.actualizaPosicion(f, c)
+                    self.mapa[f][c].animal.actualizaPosicion()
                 except AttributeError:
                     pass
 #---------------------------------------------------
@@ -240,7 +257,7 @@ class Interfaz(Ecosistema):
 
         self.ventana = Tk()
         self.ventana.title("ajedrez")
-        self.ventana.geometry(f"{str(self.L_CUADRADO *self.columna)}x{str(self.L_CUADRADO *self.fila +30)}")
+        self.ventana.geometry(f"{str(self.L_CUADRADO *columna)}x{str(self.L_CUADRADO *fila +30)}")
         #self.ventana.resizable(0, 0)
 
         self.interfaz = Canvas(self.ventana)
@@ -252,25 +269,29 @@ class Interfaz(Ecosistema):
         self.ventana.mainloop()
 
     def dibujarAnimales(self):
-        self.mapa[0][0] = Habitat()
-        self.mapa[0][0].animal = Leon()
-        self.mapa[0][0].animal.imagen = PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\{str('imagenes')}\{str('animales')}\{str('tigre')}.png")
-        for f in range(self.fila):
-            for c in range(self.columna):
+        for f in range(fila):
+            for c in range(columna):
                 try:
-                    self.mapa[f][c].imagenPrincipalAnimal = self.interfaz.create_image(self.mapa[f][c].animal.posicion[1] +4, self.mapa[f][c].animal.posicion[0] +4, image = self.mapa[f][c].animal.imagen, anchor="nw")
+                    self.mapa[f][c].imagenPrincipalAnimal = self.interfaz.create_image(self.mapa[f][c].animal.posicion[1] +4, self.mapa[f][c].animal.posicion[0] +4, image = self.mapa[f][c].animal.imagen, anchor="nw", tags="animales")
                 except AttributeError:
-                    pass
+                    continue
                 
     def actualizaImagenesAnimales(self):
-        self.interfaz.delete("all")
-        self.dibujarTablero()
+        self.interfaz.delete("animales")
+
+        for f in range(fila):
+            for c in range(columna):
+                try:
+                    self.mapa[f][c].animal.actualizaPosicion()
+                except AttributeError:
+                    continue
+
         self.dibujarAnimales()
 
     def dibujarTablero(self):
         #self.interfaz.create_rectangle(x0, y0, x1, y1, fill=)
-        for y in range(self.fila):
-            for x in range(self.columna):
+        for y in range(fila):
+            for x in range(columna):
                 self.interfaz.create_rectangle(x *self.L_CUADRADO, y *self.L_CUADRADO, (x +1) *self.L_CUADRADO, (y +1) *self.L_CUADRADO, fill=self.mapa[y][x].color)
 
         boton = ttk.Button(text="siguiente ciclo", width=66, command= lambda: (self.actualizaImagenesAnimales()))
