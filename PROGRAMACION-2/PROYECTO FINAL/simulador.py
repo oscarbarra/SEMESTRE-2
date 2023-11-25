@@ -122,7 +122,18 @@ class Conejo(Animal):
         self.nombre = "conejo"
         self.imagen = PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\{str('imagenes')}\{str('animales')}\{str('conejo')}.png")
 
+        self.vida = 750
+        self.energia = 100
+        self.velocidad = 2
         self.posicion = [40 *randint(0, 9), 40 *randint(0, 19)]
+        self.alimentacion = "herbivoro"
+        self.hambre = 100
+        self.sed = 100
+        self.sexo = choice(("macho", "hembra"))
+        self.movimiento = 1
+        self.vision = 3
+
+        super().__init__(self.imagen, self.vida, self.energia, self.velocidad, self.posicion, self.alimentacion, self.hambre, self.sed, self.sexo, self.movimiento, self.vision)
 
     def huir(self):
         pass
@@ -132,15 +143,36 @@ class Cerdo(Animal):
         self.nombre = "cerdo"
         self.imagen = PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\{str('imagenes')}\{str('animales')}\{str('cerdo')}.png")
 
+        self.vida = 1250
+        self.energia = 100
+        self.velocidad = 2
         self.posicion = [40 *randint(0, 9), 40 *randint(0, 19)]
+        self.alimentacion = "herbivoro"
+        self.hambre = 100
+        self.sed = 100
+        self.sexo = choice(("macho", "hembra"))
+        self.movimiento = 1
+        self.vision = 3
+
+        super().__init__(self.imagen, self.vida, self.energia, self.velocidad, self.posicion, self.alimentacion, self.hambre, self.sed, self.sexo, self.movimiento, self.vision)
 
 class Tigre(Animal):
     def __init__(self):
         self.nombre = "tigre"
         self.imagen = PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\{str('imagenes')}\{str('animales')}\{str('tigre')}.png")
 
+        self.vida = 2250
+        self.energia = 100
+        self.velocidad = 2
         self.posicion = [40 *randint(0, 9), 40 *randint(0, 19)]
+        self.alimentacion = "carnivoro"
+        self.hambre = 100
+        self.sed = 100
+        self.sexo = choice(("macho", "hembra"))
+        self.movimiento = 2
+        self.vision = 2
 
+        super().__init__(self.imagen, self.vida, self.energia, self.velocidad, self.posicion, self.alimentacion, self.hambre, self.sed, self.sexo, self.movimiento, self.vision)
 #---------------------------------------------------
 #Plantas de la simulacion #minimo 5
 #---------------------------------------------------
@@ -225,24 +257,27 @@ class Habitat:
 class Ecosistema:
     def __init__(self):
         self.habitat = None
-        self.mapa = [[ "_" for c in range(columna)] for f in range(fila)]
+        self.mapaPrincipal = [[ "_" for c in range(columna)] for f in range(fila)]
+        self.mapaSecundario = None
 
     def creaMapa(self):
         for f in range(fila):
             for c in range(columna):
                 self.habitat = Habitat()
-                self.mapa[f][c] = self.habitat
+                self.mapaPrincipal[f][c] = self.habitat
+        self.mapaSecundario = self.mapaPrincipal
 
     def creaAnimales(self):
         for f in range(fila):
             for c in range(columna):
-                self.mapa[f][c].animal = choice((Leon(), Conejo(),Tigre(), Cerdo(),None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None))
+                self.mapaPrincipal[f][c].animal = choice((Leon(), Conejo(),Tigre(), Cerdo(),None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None))
 
     def actualizaPosicionAnimales(self):
         for f in range(fila):
             for c in range(columna):
                 try:
-                    self.mapa[f][c].animal.actualizaPosicion()
+                    self.mapaPrincipal[f][c].animal.actualizaPosicion()
+                    self.mapaSecundario[int(self.mapaPrincipal[f][c].animal.posicion[0] /40)][int(self.mapaPrincipal[f][c].animal.posicion[1] /40)] = self.mapaPrincipal[f][c].animal
                 except AttributeError:
                     pass
 #---------------------------------------------------
@@ -272,33 +307,26 @@ class Interfaz(Ecosistema):
         for f in range(fila):
             for c in range(columna):
                 try:
-                    self.mapa[f][c].imagenPrincipalAnimal = self.interfaz.create_image(self.mapa[f][c].animal.posicion[1] +4, self.mapa[f][c].animal.posicion[0] +4, image = self.mapa[f][c].animal.imagen, anchor="nw", tags="animales")
+                    self.mapaSecundario[f][c].imagenPrincipalAnimal = self.interfaz.create_image(self.mapaSecundario[f][c].animal.posicion[1] +4, self.mapaSecundario[f][c].animal.posicion[0] +4, image = self.mapaSecundario[f][c].animal.imagen, anchor="nw", tags="animales")
                 except AttributeError:
                     continue
                 
     def actualizaImagenesAnimales(self):
         self.interfaz.delete("animales")
-
-        for f in range(fila):
-            for c in range(columna):
-                try:
-                    self.mapa[f][c].animal.actualizaPosicion()
-                except AttributeError:
-                    continue
-
+        self.actualizaPosicionAnimales()
         self.dibujarAnimales()
 
     def dibujarTablero(self):
         #self.interfaz.create_rectangle(x0, y0, x1, y1, fill=)
         for y in range(fila):
             for x in range(columna):
-                self.interfaz.create_rectangle(x *self.L_CUADRADO, y *self.L_CUADRADO, (x +1) *self.L_CUADRADO, (y +1) *self.L_CUADRADO, fill=self.mapa[y][x].color)
+                self.interfaz.create_rectangle(x *self.L_CUADRADO, y *self.L_CUADRADO, (x +1) *self.L_CUADRADO, (y +1) *self.L_CUADRADO, fill=self.mapaPrincipal[y][x].color)
 
         boton = ttk.Button(text="siguiente ciclo", width=66, command= lambda: (self.actualizaImagenesAnimales()))
         boton.place(x=0, y=402)
 
 interfaz = Interfaz()
-
 interfaz.dibujarTablero()
 interfaz.dibujarAnimales()
+
 interfaz()
