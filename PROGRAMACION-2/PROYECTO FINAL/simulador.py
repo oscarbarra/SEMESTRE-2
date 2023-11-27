@@ -50,34 +50,34 @@ class Animal(Organismo):
         # determina cuanto puede ver
         self.vision = vision
 
-    def actualizaPosicion(self, direccion, planta, contador):
+    def actualizaPosicion(self, direccion, raiz, contador):
         print(contador)
         if contador == 4:
             return
         
         elif direccion == "arriba":
-            if self.posicion[0] -(self.movimiento *cuadrado) >= 0:
+            if self.posicion[0] -(self.movimiento *cuadrado) >= 0 and raiz[int((self.posicion[0] -(self.movimiento *cuadrado)) /cuadrado)][int(self.posicion[1] /cuadrado)].animal != "-":
                 self.posicion[0] = self.posicion[0] -(self.movimiento *cuadrado)
             else:
-                self.actualizaPosicion("abajo", planta, contador +1)
+                self.actualizaPosicion("abajo", raiz, contador +1)
 
         elif direccion == "abajo":
-            if self.posicion[0] +(self.movimiento *cuadrado) <= 360:
+            if self.posicion[0] +(self.movimiento *cuadrado) <= 360 and raiz[int((self.posicion[0] +(self.movimiento *cuadrado)) /cuadrado)][int(self.posicion[1] /cuadrado)].animal != "-":
                 self.posicion[0] = self.posicion[0] +(self.movimiento *cuadrado)
             else:
-                self.actualizaPosicion("izquierda", planta, contador +1)
+                self.actualizaPosicion("izquierda", raiz, contador +1)
         
         elif direccion == "izquierda":
-            if self.posicion[1] -(self.movimiento *cuadrado) >= 0:
+            if self.posicion[1] -(self.movimiento *cuadrado) >= 0 and raiz[int(self.posicion[0] /cuadrado)][int((self.posicion[1] -(self.movimiento *cuadrado)) /cuadrado)] != "-":
                 self.posicion[1] = self.posicion[1] -(self.movimiento *cuadrado)
             else:
-                self.actualizaPosicion("derecha", planta, contador +1)
+                self.actualizaPosicion("derecha", raiz, contador +1)
 
         elif direccion == "derecha":
-            if self.posicion[1] +(self.movimiento *cuadrado) <= 760: 
+            if self.posicion[1] +(self.movimiento *cuadrado) <= 760 and raiz[int(self.posicion[0] /cuadrado)][int((self.posicion[1] +(self.movimiento *cuadrado)) /cuadrado)] != "-": 
                 self.posicion[1] = self.posicion[1] +(self.movimiento *cuadrado)
             else:
-                self.actualizaPosicion("arriba", planta, contador +1)
+                self.actualizaPosicion("arriba", raiz, contador +1)
 
 class Leon(Animal):
     def __init__(self, posicion):
@@ -290,7 +290,7 @@ class Ecosistema:
         for f in range(fila):
             for c in range(columna):
                 try:
-                    self.mapaPrincipal[f][c].animal.actualizaPosicion(choice(("arriba", "abajo", "izquierda", "derecha")),self.mapaPrincipal[f][c].planta, 0)
+                    self.mapaPrincipal[f][c].animal.actualizaPosicion(choice(("arriba", "abajo", "izquierda", "derecha")),self.mapaPrincipal, 0)
                 except AttributeError:
                     continue
                 
