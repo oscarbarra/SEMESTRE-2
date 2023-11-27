@@ -50,23 +50,34 @@ class Animal(Organismo):
         # determina cuanto puede ver
         self.vision = vision
 
-    def actualizaPosicion(self, direccion, arriba, abajo, izquierda, derecha):
-        if self.alimentacion == "carnivoro":
-            if direccion == "arriba" and arriba is None:
-                if self.posicion[0] - (cuadrado *self.movimiento) >= 0:
-                    self.posicion[0] -= (cuadrado *self.movimiento)
+    def actualizaPosicion(self, direccion, planta, contador):
+        print(contador)
+        if contador == 4:
+            return
+        
+        elif direccion == "arriba":
+            if self.posicion[0] -(self.movimiento *cuadrado) >= 0:
+                self.posicion[0] = self.posicion[0] -(self.movimiento *cuadrado)
+            else:
+                self.actualizaPosicion("abajo", planta, contador +1)
 
-            elif direccion == "abajo" and abajo is None:
-                if self.posicion[0] + (cuadrado *self.movimiento) <= 360:
-                    self.posicion[0] += (cuadrado *self.movimiento)
+        elif direccion == "abajo":
+            if self.posicion[0] +(self.movimiento *cuadrado) <= 360:
+                self.posicion[0] = self.posicion[0] +(self.movimiento *cuadrado)
+            else:
+                self.actualizaPosicion("izquierda", planta, contador +1)
+        
+        elif direccion == "izquierda":
+            if self.posicion[1] -(self.movimiento *cuadrado) >= 0:
+                self.posicion[1] = self.posicion[1] -(self.movimiento *cuadrado)
+            else:
+                self.actualizaPosicion("derecha", planta, contador +1)
 
-            elif direccion == "izquierda" and izquierda is None:
-                if self.posicion[1] - (cuadrado *self.movimiento) >= 0:
-                    self.posicion[1] -= (cuadrado *self.movimiento)
-
-            elif direccion == "derecha" and derecha is None:
-                if self.posicion[1] + (cuadrado *self.movimiento) <= 760:
-                    self.posicion[1] += (cuadrado *self.movimiento)
+        elif direccion == "derecha":
+            if self.posicion[1] +(self.movimiento *cuadrado) <= 760: 
+                self.posicion[1] = self.posicion[1] +(self.movimiento *cuadrado)
+            else:
+                self.actualizaPosicion("arriba", planta, contador +1)
 
 class Leon(Animal):
     def __init__(self, posicion):
@@ -161,12 +172,32 @@ class Planta(Organismo):
         pass
 
 class Zanahoria(Planta):
-    def __init__(self):
-        self.imagen = None
+    def __init__(self, posicion):
+        self.imagen = PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\{'imagenes'}\{'plantas'}\{'zanahoria'}.png")
         self.vida = 100
         self.energia = 100
         self.velocidad = 2
-        self.posicion = [randint(0, 9), randint(0, 9)]
+        self.posicion = posicion
+
+        super().__init__(self.imagen, self.vida, self.energia,self.velocidad, self.posicion)
+
+class FrutoRojo(Planta):
+    def __init__(self, posicion):
+        self.imagen = PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\{'imagenes'}\{'plantas'}\{'frutoRojo'}.png")
+        self.vida = 100
+        self.energia = 100
+        self.velocidad = 2
+        self.posicion = posicion
+
+        super().__init__(self.imagen, self.vida, self.energia,self.velocidad, self.posicion)
+
+class Hierba(Planta):
+    def __init__(self, posicion):
+        self.imagen = PhotoImage(file=f"PROGRAMACION-2\PROYECTO FINAL\{'imagenes'}\{'plantas'}\{'hierba'}.png")
+        self.vida = 100
+        self.energia = 100
+        self.velocidad = 2
+        self.posicion = posicion
 
         super().__init__(self.imagen, self.vida, self.energia,self.velocidad, self.posicion)
 
@@ -204,20 +235,17 @@ class Ambiente:
 class Habitat:
     def __init__(self):
         #esencia del habitat
-        self.color = choice(("#F7E505", "#3CC600", "#FFFFFF"))
-
-        #posicion del habitat
-        self.cuadrado = None
+        self.color = choice(("#F7E505", "#61D850", "#FFFFFF"))
 
         #animal que esta en el habitat
-        self.animal = None
+        self.animal = "-"
 
-        self.imagenPrincipalAnimal = None
+        self.imagenPrincipalAnimal = "-"
 
         #planta que esta en el habitat
-        self.planta = None
+        self.planta = "-"
         
-        self.imagenPrincipalPlanta = None
+        self.imagenPrincipalPlanta = "-"
 
 #---------------------------------------------------
 #Ecosistema regulador de la simalucaion
@@ -225,33 +253,47 @@ class Habitat:
 class Ecosistema:
     def __init__(self):
         self.habitat = None
-        self.mapaPrincipal = [[ None for c in range(columna)] for f in range(fila)]
-        self.mapaSecundario = [[ None for c in range(columna)] for f in range(fila)]
+        self.mapaPrincipal = [[ "-" for c in range(columna)] for f in range(fila)]
+        self.mapaSecundario = [[ "-" for c in range(columna)] for f in range(fila)]
 
-    def creaMapa(self):
+    def creaMapaPrincipal(self):
         for f in range(fila):
             for c in range(columna):
                 self.habitat = Habitat()
                 self.mapaPrincipal[f][c] = self.habitat
-                self.mapaSecundario[f][c] = self.habitat
 
-    def limpiaMapaSecundario(self):
-        self.mapaSecundario = [[None for c in range(columna)] for f in range(fila)]
+    def creaPlantas(self):
+            for f in range(fila):
+                for c in range(columna):
+                    planta = choice((Zanahoria([cuadrado*f, cuadrado*c]), FrutoRojo([cuadrado*f, cuadrado*c]), Hierba([cuadrado*f, cuadrado*c]),
+                                                                "-", "-", "-", "-", "_", "-", "-", "-", "-", "_", "-", "-", "-", "-", "_", "-", "-", "-", "-", "_"))
+                    if self.mapaPrincipal[f][c].planta == "-":
+                        self.mapaPrincipal[f][c].planta = planta
 
     def creaAnimales(self):
         for f in range(fila):
             for c in range(columna):
-                self.mapaPrincipal[f][c].animal = choice((Leon([f *cuadrado, c *cuadrado]), Conejo([f *cuadrado, c *cuadrado]),Tigre([f *cuadrado, c *cuadrado]), Cerdo([f *cuadrado, c *cuadrado]),
-                                                          None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None))
+                if self.mapaPrincipal[f][c].planta == "-":
+                    animal = choice((Leon([cuadrado*f, cuadrado*c]), Conejo([cuadrado*f, cuadrado*c]),Tigre([cuadrado*f, cuadrado*c]), Cerdo([cuadrado*f, cuadrado*c]),
+                                                            "-", "-", "-", "-", "_", "-", "-", "-", "-", "_", "-", "-", "-", "-", "_", "-", "-", "-", "-", "_"))
+                    self.mapaPrincipal[f][c].animal = animal
+
+    def creaMapaSecundario(self):
+        for f in range(fila):
+            for c in range(columna):
+                self.mapaSecundario[f][c] = self.mapaPrincipal[f][c]
+
+    def limpiaMapaSecundario(self):
+            self.mapaSecundario = [[ "-" for c in range(columna)] for f in range(fila)]
 
     def actualizaPosicionAnimales(self):
         for f in range(fila):
             for c in range(columna):
                 try:
-                    self.mapaPrincipal[f][c].animal.actualizaPosicion(choice(("arriba", "abajo", "izquierda", "derecha")), self.mapaSecundario[f -self.mapaSecundario[f][c].animal.movimiento][c].animal, self.mapaSecundario[f +self.mapaSecundario[f][c].animal.movimiento][c].animal, self.mapaSecundario[f][c -self.mapaSecundario[f][c].animal.movimiento].animal, self.mapaSecundario[f][c +self.mapaSecundario[f][c].animal.movimiento].animal)
-                    self.mapaSecundario[int(self.mapaPrincipal[f][c].animal.posicion[0] /40)][int(self.mapaPrincipal[f][c].animal.posicion[1] /40)] = self.mapaPrincipal[f][c]
+                    self.mapaPrincipal[f][c].animal.actualizaPosicion(choice(("arriba", "abajo", "izquierda", "derecha")),self.mapaPrincipal[f][c].planta, 0)
                 except AttributeError:
                     continue
+                
     def cantidadAnimalesPantalla(self):
         contador = 0
         for f in range(fila):
@@ -273,13 +315,16 @@ class Ecosistema:
                 except AttributeError:
                     continue
         print(contador)
+
+    
 #---------------------------------------------------
 #Interfaz de la simulacion
 #---------------------------------------------------
 class Interfaz(Ecosistema):
     def __init__(self):
         super().__init__()
-        super().creaMapa()
+        super().creaMapaPrincipal()
+        
 
         self.ventana = Tk()
         self.ventana.title("ajedrez")
@@ -288,11 +333,22 @@ class Interfaz(Ecosistema):
 
         self.interfaz = Canvas(self.ventana)
         self.interfaz.pack(fill="both", expand=True)
-        
+
+        super().creaPlantas()
         super().creaAnimales()
+        super().creaMapaSecundario()
 
     def __call__(self):
         self.ventana.mainloop()
+
+
+    def dibujarPlantas(self):
+        for f in range(fila):
+            for c in range(columna):
+                try:
+                    self.mapaSecundario[f][c].imagenPrincipal = self.interfaz.create_image(self.mapaSecundario[f][c].planta.posicion[1] +4, self.mapaSecundario[f][c].planta.posicion[0] +4, image = self.mapaSecundario[f][c].planta.imagen, anchor="nw", tags=f"planta{f}{c}")
+                except AttributeError:
+                    continue
 
     def dibujarAnimales(self):
         for f in range(fila):
@@ -302,26 +358,29 @@ class Interfaz(Ecosistema):
                 except AttributeError:
                     continue
 
-    def actualizaImagenesAnimales(self):
-        self.interfaz.delete("animales")
-
-        self.limpiaMapaSecundario()
-        self.actualizaPosicionAnimales()
-        self.dibujarAnimales()
-        self.cantidadAnimalesPantalla()
-
     def dibujarTablero(self):
         #self.interfaz.create_rectangle(x0, y0, x1, y1, fill=)
         for y in range(fila):
             for x in range(columna):
                 self.interfaz.create_rectangle(x *cuadrado, y *cuadrado, (x +1) *cuadrado, (y +1) *cuadrado, fill=self.mapaPrincipal[y][x].color)
 
-        boton = ttk.Button(text="siguiente ciclo", width=66, command= lambda: (self.actualizaImagenesAnimales()))
+        boton = ttk.Button(text="siguiente ciclo", width=132, command= lambda: (self.actualizaImagenesAnimales()))
         boton.place(x=0, y=402)
+
+    def actualizaImagenesAnimales(self):
+        self.interfaz.delete("animales")
+
+        self.actualizaPosicionAnimales()
+        self.limpiaMapaSecundario()
+        self.creaMapaSecundario()
+        self.dibujarAnimales()
+        self.cantidadAnimalesPantalla()    
 
 interfaz = Interfaz()
 interfaz.dibujarTablero()
+interfaz.dibujarPlantas()
 interfaz.dibujarAnimales()
 interfaz.cantidadAnimalesTotales()
+interfaz.cantidadAnimalesPantalla()
 
 interfaz()

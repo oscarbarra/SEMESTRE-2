@@ -1,5 +1,4 @@
-hola = None
-oscar = "oscar"
-
-print(hola is None)
-print(oscar is None)
+hola = f"planta{1}{2}"
+xd = "xs"
+print(hola)
+print(isinstance((hola, xd)))
