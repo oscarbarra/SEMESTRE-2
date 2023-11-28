@@ -2,7 +2,7 @@
 #hacer una interfas grafica con el comportamiento
 
 from tkinter import Tk, Canvas, PhotoImage, ttk
-from random import choice
+from random import choice, randint
 
 #---------------------------------------------------
 #variables globales
@@ -13,8 +13,8 @@ class Organismo:
     def __init__(self, vida, energia, velocidad, posicion):
         self.vida = vida
 
-        # determina la velocidad maxima  // determina la vida de la planta
-        self.energia = energia # 0 /100
+        # determina los ciclos de apareamiento // determina la vida de la planta
+        self.energia = energia # 0 /100        // energia < 50 -> vida -20 cada ciclo
 
         # casillas que se mueve cuando 'caza' // determina el crecimiento de la planta
         # movimento *2 *energia 
@@ -23,8 +23,11 @@ class Organismo:
         # donde esta en la simulacion
         self.posicion = posicion
 
+    def morir(self):
+        pass
+
 #---------------------------------------------------
-#Animales de la simulacion#minimo 10
+#Animales de la simulacion #minimo 10
 #---------------------------------------------------
 class Animal(Organismo):
     def __init__(self, imagen, vida, energia, velocidad, posicion,alimentacion, hambre, sed, sexo, movimiento, vision):
@@ -35,13 +38,13 @@ class Animal(Organismo):
         # determina se es 'carnovoro' 'hervivoro' 'omnivoro'
         self.alimentacion = alimentacion
 
-        # modifica la 'energia del animal'
+        # modifica la 'vida del animal'
         self.hambre = hambre # 0 /1
 
-        # modifica la 'energia del animal'
+        # modifica la 'vida del animal'
         self.sed = sed #0 /1
 
-        # determina si es 'macho' 'hembra' 
+        # determina si es 'macho' o 'hembra' 
         self.sexo = sexo
 
         # determina cuantas casillas se mueve por el mapa
@@ -83,6 +86,48 @@ class Animal(Organismo):
                 else:
                         self.cambiaPosicion("arriba", raiz, contador +1, excluir)
     
+    def creaHijo(self, direccion, raiz, contador, raza):
+        if contador < 4:
+            if direccion == "arriba":
+                if self.posicion[0] - cuadrado >= 0: #revisa que este viendo dentro del mapa
+                    if raiz[int((self.posicion[0] - cuadrado) /cuadrado)][int(self.posicion[1] /cuadrado)].animal == "-" and raiz[int((self.posicion[0] - cuadrado) /cuadrado)][int(self.posicion[1] /cuadrado)].planta == "-": #revisa que no exista un animal o planta
+                        raiz[int((self.posicion[0] - cuadrado) /cuadrado)][int(self.posicion[1] /cuadrado)].animal = raza
+                        raiz[int((self.posicion[0] - cuadrado) /cuadrado)][int(self.posicion[1] /cuadrado)].animal.posicion = [self.posicion[0], self.posicion[1]]
+                    else:
+                        self.creaHijo("abajo", raiz, contador +1, raza)
+                else:
+                    self.creaHijo("abajo", raiz, contador +1, raza)
+
+            if direccion == "abajo":
+                if self.posicion[0] + cuadrado <= fila*cuadrado -cuadrado: #revisa que este viendo dentro del mapa
+                    if raiz[int((self.posicion[0] + cuadrado) /cuadrado)][int(self.posicion[1] /cuadrado)].animal == "-" and raiz[int((self.posicion[0] + cuadrado) /cuadrado)][int(self.posicion[1] /cuadrado)].planta  == "-": #revisa que no exista un animal o planta
+                        raiz[int((self.posicion[0] + cuadrado) /cuadrado)][int(self.posicion[1] /cuadrado)].animal = raza
+                        raiz[int((self.posicion[0] + cuadrado) /cuadrado)][int(self.posicion[1] /cuadrado)].animal.posicion = [self.posicion[0] + cuadrado, self.posicion[1]]
+                    else:
+                        self.creaHijo("izquierda", raiz, contador +1, raza)
+                else:
+                    self.creaHijo("izquierda", raiz, contador +1, raza)
+
+            if direccion == "izquierda":
+                if self.posicion[1] - cuadrado >= 0: #revisa que este viendo dentro del mapa
+                    if raiz[int(self.posicion[0] /cuadrado)][int((self.posicion[1] -cuadrado) /cuadrado)].animal == "-" and raiz[int(self.posicion[0] /cuadrado)][int((self.posicion[1] - cuadrado) /cuadrado)].planta == "-": #revisa que no exista un animal o planta
+                        raiz[int(self.posicion[0] /cuadrado)][int((self.posicion[1] -cuadrado) /cuadrado)].animal = raza
+                        raiz[int(self.posicion[0] /cuadrado)][int((self.posicion[1] -cuadrado) /cuadrado)].animal.posicion = [self.posicion[0], self.posicion[1] -cuadrado]
+                    else:
+                        self.creaHijo("derecha", raiz, contador +1, raza)
+                else:
+                    self.creaHijo("derecha", raiz, contador +1, raza)
+
+            if direccion == "derecha":
+                if self.posicion[1] + cuadrado <= columna*cuadrado -cuadrado : #revisa que este viendo dentro del mapa
+                    if raiz[int(self.posicion[0] /cuadrado)][int((self.posicion[1] +cuadrado) /cuadrado)].animal == "-" and raiz[int(self.posicion[0] /cuadrado)][int((self.posicion[1] + cuadrado) /cuadrado)].planta == "-": #revisa que no exista un animal o planta
+                        raiz[int(self.posicion[0] /cuadrado)][int((self.posicion[1] +cuadrado) /cuadrado)].animal = raza
+                        raiz[int(self.posicion[0] /cuadrado)][int((self.posicion[1] +cuadrado) /cuadrado)].animal.posicion = [self.posicion[0], self.posicion[1] +cuadrado]
+                    else:
+                        self.creaHijo("arriba", raiz, contador +1, raza)
+                else:
+                    self.creaHijo("arriba", raiz, contador +1, raza)
+
     def reproduccion(self, direccion, raiz):
         global excluir
 
@@ -91,18 +136,18 @@ class Animal(Organismo):
                 if raiz[int((self.posicion[0] - self.vision*cuadrado) /cuadrado)][int(self.posicion[1] /cuadrado)].animal != "-": #revisa que exista un animal e la casilla
                     if raiz[int((self.posicion[0] - self.vision*cuadrado) /cuadrado)][int(self.posicion[1] /cuadrado)].animal.nombre == self.nombre: #revisa que los animales sean de la misma raza
                         if raiz[int((self.posicion[0] - self.vision*cuadrado) /cuadrado)][int(self.posicion[1] /cuadrado)].animal.sexo != self.sexo: #revisa que los animales sean de sexo opuesto
-                            print(self.sexo, raiz[int((self.posicion[0] - self.vision*cuadrado) /cuadrado)][int(self.posicion[1] /cuadrado)].animal.sexo)
                             excluir = [self.posicion[0] - self.vision*cuadrado, self.posicion[1]]
                             self.cambiaPosicion("arriba", raiz, 0, excluir)
+                            return 1
 
         if direccion == "abajo":
             if self.posicion[0] + self.vision*cuadrado <= fila*cuadrado -40: #revisa que este viendo dentro del mapa
                 if raiz[int((self.posicion[0] +self.vision*cuadrado) /cuadrado)][int(self.posicion[1] /cuadrado)].animal != "-": #revisa que exista un animal e la casilla
                     if raiz[int((self.posicion[0] + self.vision*cuadrado) /cuadrado)][int(self.posicion[1] /cuadrado)].animal.nombre == self.nombre: #revisa que los animales sean de la misma raza
                         if raiz[int((self.posicion[0] + self.vision*cuadrado) /cuadrado)][int(self.posicion[1] /cuadrado)].animal.sexo != self.sexo: #revisa que los animales sean de sexo opuesto
-                            print(self.sexo, raiz[int((self.posicion[0] + self.vision*cuadrado) /cuadrado)][int(self.posicion[1] /cuadrado)].animal.sexo)
                             excluir = [self.posicion[0] + self.vision*cuadrado, self.posicion[1]]
                             self.cambiaPosicion("abajo", raiz, 0, excluir)
+                            return 1
                             
 
         if direccion == "izquierda":
@@ -110,9 +155,9 @@ class Animal(Organismo):
                 if raiz[int(self.posicion[0] /cuadrado)][int((self.posicion[1] - self.vision*cuadrado) /cuadrado)].animal != "-": #revisa que exista un animal e la casilla
                     if raiz[int(self.posicion[0] /cuadrado)][int((self.posicion[1] - self.vision*cuadrado) /cuadrado)].animal.nombre == self.nombre: #revisa que los animales sean de la misma raza
                         if raiz[int(self.posicion[0] /cuadrado)][int((self.posicion[1] - self.vision*cuadrado) /cuadrado)].animal.sexo != self.sexo: #revisa que los animales sean de sexo opuesto
-                            print(self.sexo, raiz[int(self.posicion[0] /cuadrado)][int((self.posicion[1] - self.vision*cuadrado) /cuadrado)].animal.sexo)
                             excluir = [self.posicion[0], self.posicion[1] - self.vision*cuadrado]
                             self.cambiaPosicion("izquierda", raiz, 0, excluir)
+                            return 1
                             
                 
         if direccion == "derecha":
@@ -120,14 +165,9 @@ class Animal(Organismo):
                 if raiz[int(self.posicion[0] /cuadrado)][int((self.posicion[1] + self.vision*cuadrado) /cuadrado)].animal != "-": #revisa que exista un animal e la casilla
                     if raiz[int(self.posicion[0] /cuadrado)][int((self.posicion[1] + self.vision*cuadrado) /cuadrado)].animal.nombre == self.nombre: #revisa que los animales sean de la misma raza
                         if raiz[int(self.posicion[0] /cuadrado)][int((self.posicion[1] + self.vision*cuadrado) /cuadrado)].animal.sexo != self.sexo: #revisa que los animales sean de sexo opuesto
-                            print(self.sexo, raiz[int(self.posicion[0] /cuadrado)][int((self.posicion[1] + self.vision*cuadrado) /cuadrado)].animal.sexo)
                             excluir = [self.posicion[0], self.posicion[1] + self.vision*cuadrado]
                             self.cambiaPosicion("derecha", raiz, 0, excluir)
-
-    def cambioDeDia(self):
-            self.energia -=10
-            self.hambre -=10
-            self.sed -=10
+                            return 1
 
 class Leon(Animal):
     def __init__(self, posicion):
@@ -146,7 +186,11 @@ class Leon(Animal):
         self.movimiento = 2
         self.vision= 3
         
-        super().__init__(self.imagen, self.vida, self.energia, self.velocidad, self.posicion, self.alimentacion, self.hambre, self.sed, self.sexo, self.movimiento, self.vision)
+        super().__init__(self.imagen, self.vida, self.energia, self.velocidad, self.posicion,
+                          self.alimentacion, self.hambre, self.sed, self.sexo, self.movimiento, self.vision)
+
+    def cazar(self):
+        pass
 
 class Tigre(Animal):
     def __init__(self, posicion):
@@ -166,6 +210,9 @@ class Tigre(Animal):
        
         super().__init__(self.imagen, self.vida, self.energia, self.velocidad, self.posicion, self.alimentacion, self.hambre, self.sed, self.sexo, self.movimiento, self.vision)
 
+    def cazar(self):
+        pass
+
 class Lobo(Animal):
     def __init__(self, posicion):
         self.nombre = "lobo"
@@ -182,8 +229,11 @@ class Lobo(Animal):
         self.movimiento = 2
         self.vision = 3
 
-        super().__init__(self.imagen, self.vida, self.energia, self.velocidad, self.posicion, self.alimentacion, self.hambre, self.sed, self.sexo, self.movimiento, self.vision)
+        super().__init__(self.imagen, self.vida, self.energia, self.velocidad, self.posicion, self.alimentacion,
+                          self.hambre, self.sed, self.sexo, self.movimiento, self.vision)
 
+    def cazar(self):
+        pass
 
 class OsoPolar(Animal):
     def __init__(self, posicion):
@@ -203,6 +253,9 @@ class OsoPolar(Animal):
 
         super().__init__(self.imagen, self.vida, self.energia, self.velocidad, self.posicion, self.alimentacion, self.hambre, self.sed, self.sexo, self.movimiento, self.vision)
 
+    def cazar(self):
+        pass
+
 class Zorro(Animal):
     def __init__(self, posicion):
         self.nombre = "zorro"
@@ -221,6 +274,8 @@ class Zorro(Animal):
 
         super().__init__(self.imagen, self.vida, self.energia, self.velocidad, self.posicion, self.alimentacion, self.hambre, self.sed, self.sexo, self.movimiento, self.vision)
 
+    def cazar(self):
+        pass
 
 class Conejo(Animal):
     def __init__(self, posicion):
@@ -238,7 +293,11 @@ class Conejo(Animal):
         self.movimiento = 1
         self.vision = 2
 
-        super().__init__(self.imagen, self.vida, self.energia, self.velocidad, self.posicion, self.alimentacion, self.hambre, self.sed, self.sexo, self.movimiento, self.vision)
+        super().__init__(self.imagen, self.vida, self.energia, self.velocidad, self.posicion, self.alimentacion,
+                          self.hambre, self.sed, self.sexo, self.movimiento, self.vision)
+
+    def huir(self):
+        pass
 
 class Cerdo(Animal):
     def __init__(self, posicion):
@@ -258,6 +317,9 @@ class Cerdo(Animal):
 
         super().__init__(self.imagen, self.vida, self.energia, self.velocidad, self.posicion, self.alimentacion, self.hambre, self.sed, self.sexo, self.movimiento, self.vision)
 
+    def huir(self):
+        pass
+
 class Cebra(Animal):
     def __init__(self, posicion):
         self.nombre = "cebra"
@@ -275,6 +337,9 @@ class Cebra(Animal):
         self.vision = 2
 
         super().__init__(self.imagen, self.vida, self.energia, self.velocidad, self.posicion, self.alimentacion, self.hambre, self.sed, self.sexo, self.movimiento, self.vision)
+
+    def huir(self):
+        pass
 
 class Raton(Animal):
     def __init__(self, posicion):
@@ -294,6 +359,9 @@ class Raton(Animal):
 
         super().__init__(self.imagen, self.vida, self.energia, self.velocidad, self.posicion, self.alimentacion, self.hambre, self.sed, self.sexo, self.movimiento, self.vision)
 
+    def huir(self):
+        pass
+
 class Vaca(Animal):
     def __init__(self, posicion):
         self.nombre = "cerdo"
@@ -312,6 +380,9 @@ class Vaca(Animal):
 
         super().__init__(self.imagen, self.vida, self.energia, self.velocidad, self.posicion, self.alimentacion, self.hambre, self.sed, self.sexo, self.movimiento, self.vision)
 
+    def huir(self):
+        pass
+
 #---------------------------------------------------
 #Plantas de la simulacion #minimo 5
 #---------------------------------------------------
@@ -322,12 +393,6 @@ class Planta(Organismo):
         self.imagen = imagen
 
     def fotosintesis(self):
-        pass
-
-    def reproducirse(self):
-        pass
-
-    def morir(self):
         pass
 
 class Zanahoria(Planta):
@@ -360,23 +425,12 @@ class Hierba(Planta):
 
         super().__init__(self.imagen, self.vida, self.energia,self.velocidad, self.posicion)
 
-#minimo 3
+#------------------------------------------
+#Ambientes de la simulacion
+#------------------------------------------
 class Ambiente:
     def __init__(self, temperatura):
         self.temepratura = temperatura
-
-    # estados del clima 
-    def clima_soleado(self):
-        pass
-    
-    def clima_calido(self):
-        pass
-
-    def clima_frio(self):
-        pass
-
-    def clima_lluvia(self):
-        pass
 
     # desastres naturales
     def terremoto(self):
@@ -388,6 +442,18 @@ class Ambiente:
     def meteorito(self):
         pass
 
+class Soleado(Ambiente):
+    def __init__(self):
+        super().__init__(randint(25, 40))
+
+class Lluvia(Ambiente):
+    def __init__(self):
+        super().__init__(randint(10, 25))
+
+class Frio(Ambiente):
+    def __init__(self):
+        super().__init__(randint(-10, 10))
+
 #---------------------------------------------------
 #Habitats de la simulacion
 #---------------------------------------------------
@@ -395,6 +461,33 @@ class Habitat:
     def __init__(self):
         #esencia del habitat
         self.color = choice(("#F7E505", "#61D850", "#FFFFFF"))
+
+        self.ambiente = "-"
+
+        #animal que esta en el habitat
+        self.animal = "-"
+
+        self.imagenPrincipalAnimal = "-"
+
+        #planta que esta en el habitat
+        self.planta = "-"
+        
+        self.imagenPrincipalPlanta = "-"
+    
+    def cambioDeDia(self):
+        self.animal.energia -= 10
+        self.animal.hambre -= 20
+        self.animal.sed -= 20
+
+        if self.animal.hambre <= 50 or self.animal.sed <= 50:
+            self.animal.vida -=20
+
+class Desierto(Habitat):
+    def __init__(self):
+        #esencia del habitat
+        self.color = "#F7E505"
+
+        self.ambiente = Soleado()
 
         #animal que esta en el habitat
         self.animal = "-"
@@ -406,6 +499,39 @@ class Habitat:
         
         self.imagenPrincipalPlanta = "-"
 
+class Bosque(Habitat):
+    def __init__(self):
+        #esencia del habitat
+        self.color = "#61D850"
+
+        self.ambiente = Lluvia()
+
+        #animal que esta en el habitat
+        self.animal = "-"
+
+        self.imagenPrincipalAnimal = "-"
+
+        #planta que esta en el habitat
+        self.planta = "-"
+        
+        self.imagenPrincipalPlanta = "-"
+
+class Antartida(Habitat):
+    def __init__(self):
+        #esencia del habitat
+        self.color = "#FFFFFF"
+
+        self.ambiente = Frio()
+
+        #animal que esta en el habitat
+        self.animal = "-"
+
+        self.imagenPrincipalAnimal = "-"
+
+        #planta que esta en el habitat
+        self.planta = "-"
+        
+        self.imagenPrincipalPlanta = "-"
 #---------------------------------------------------
 #Ecosistema regulador de la simalucaion
 #---------------------------------------------------
@@ -417,14 +543,15 @@ class Ecosistema:
     def creaMapaPrincipal(self):
         for f in range(fila):
             for c in range(columna):
-                self.habitat = Habitat()
+                self.habitat = choice((Desierto(), Bosque(), Antartida()))
                 self.mapaPrincipal[f][c] = self.habitat
 
     def creaPlantas(self):
             for f in range(fila):
                 for c in range(columna):
                     planta = choice((Zanahoria([cuadrado*f, cuadrado*c]), FrutoRojo([cuadrado*f, cuadrado*c]), Hierba([cuadrado*f, cuadrado*c]),
-                                                                "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"))
+                                                                "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-",
+                                                                  "-", "-", "-", "-", "-", "-"))
                     if self.mapaPrincipal[f][c].planta == "-":
                         self.mapaPrincipal[f][c].planta = planta
 
@@ -432,9 +559,12 @@ class Ecosistema:
         for f in range(fila):
             for c in range(columna):
                 if self.mapaPrincipal[f][c].planta == "-":
-                    animal = choice((Leon([cuadrado*f, cuadrado*c]), Tigre([cuadrado*f, cuadrado*c]), Lobo([cuadrado*f, cuadrado*c]), OsoPolar([cuadrado*f, cuadrado*c]), Zorro([cuadrado*f, cuadrado*c]),
-                                      Conejo([cuadrado*f, cuadrado*c]), Cerdo([cuadrado*f, cuadrado*c]),Cebra([cuadrado*f, cuadrado*c]), Raton([cuadrado*f, cuadrado*c]), Vaca([cuadrado*f, cuadrado*c]),
-                                      "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"))
+                    animal = choice((Leon([cuadrado*f, cuadrado*c]), Tigre([cuadrado*f, cuadrado*c]), Lobo([cuadrado*f, cuadrado*c]),
+                                      OsoPolar([cuadrado*f, cuadrado*c]), Zorro([cuadrado*f, cuadrado*c]),
+                                      Conejo([cuadrado*f, cuadrado*c]), Cerdo([cuadrado*f, cuadrado*c]),
+                                      Cebra([cuadrado*f, cuadrado*c]), Raton([cuadrado*f, cuadrado*c]), Vaca([cuadrado*f, cuadrado*c]),
+                                      "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-",
+                                        "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"))
                     
                     self.mapaPrincipal[f][c].animal = animal
 
@@ -459,11 +589,53 @@ class Ecosistema:
         for f in range(fila):
             for c in range(columna):
                 if self.mapaPrincipal[f][c].animal != "-":
-                    self.mapaPrincipal[f][c].animal.cambioDeDia()
+                    print(self.mapaPrincipal[f][c].animal.nombre)
+                    self.mapaPrincipal[f][c].cambioDeDia()
 
-                    print(self.mapaPrincipal[f][c].animal.energia)
-                    if self.mapaPrincipal[f][c].animal.energia >= 40:
-                        self.mapaPrincipal[f][c].animal.reproduccion(choice(("arriba", "abajo", "izquierda", "derecha")), self.mapaPrincipal)
+                    if self.mapaPrincipal[f][c].animal.vida <= 0:
+                        self.mapaPrincipal[f][c].animal = "-"
+
+                    #elif self.mapaPrincipal[f][c].animal.energia >= 70:
+                        #print(self.mapaPrincipal[f][c].animal.nombre)
+                        #if self.mapaPrincipal[f][c].animal.reproduccion(choice(("arriba", "abajo", "izquierda", "derecha")), self.mapaPrincipal) == 1:
+                        
+                            
+                            #print(self.mapaPrincipal[f][c].animal.nombre)
+                            #if self.mapaPrincipal[f][c].animal.nombre == "leon":
+                                #self.mapaPrincipal[f][c].animal.creaHijo(choice(("arriba", "abajo", "izquierda", "derecha")), self.mapaPrincipal, 0, Leon("-"))
+
+                            #elif self.mapaPrincipal[f][c].animal.nombre == "lobo":
+                               #self.mapaPrincipal[f][c].animal.creaHijo(choice(("arriba", "abajo", "izquierda", "derecha")), self.mapaPrincipal, 0, Lobo("-"))
+                            
+                            #elif self.mapaPrincipal[f][c].animal.nombre == "osoPolar":
+                                #self.mapaPrincipal[f][c].animal.creaHijo(choice(("arriba", "abajo", "izquierda", "derecha")), self.mapaPrincipal, 0, OsoPolar("-"))
+                            
+                            #elif self.mapaPrincipal[f][c].animal.nombre == "tigre":
+                                #self.mapaPrincipal[f][c].animal.creaHijo(choice(("arriba", "abajo", "izquierda", "derecha")), self.mapaPrincipal, 0, Tigre("-"))
+                            
+                            #elif self.mapaPrincipal[f][c].animal.nombre == "zorro":
+                                #self.mapaPrincipal[f][c].animal.creaHijo(choice(("arriba", "abajo", "izquierda", "derecha")), self.mapaPrincipal, 0, Zorro("-"))
+                            
+                            #elif self.mapaPrincipal[f][c].animal.nombre == "cebra":
+                                #self.mapaPrincipal[f][c].animal.creaHijo(choice(("arriba", "abajo", "izquierda", "derecha")), self.mapaPrincipal, 0, Cebra("-"))
+                            
+                            #elif self.mapaPrincipal[f][c].animal.nombre == "raton":
+                                #self.mapaPrincipal[f][c].animal.creaHijo(choice(("arriba", "abajo", "izquierda", "derecha")), self.mapaPrincipal, 0, Raton("-"))
+                            
+                            #elif self.mapaPrincipal[f][c].animal.nombre == "vaca":
+                                #self.mapaPrincipal[f][c].animal.creaHijo(choice(("arriba", "abajo", "izquierda", "derecha")), self.mapaPrincipal, 0, Vaca("-"))
+                            
+                            #elif self.mapaPrincipal[f][c].animal.nombre == "cerdo":
+                                #self.mapaPrincipal[f][c].animal.creaHijo(choice(("arriba", "abajo", "izquierda", "derecha")), self.mapaPrincipal, 0, Cerdo("-"))
+                            
+                            #else:
+                                #self.mapaPrincipal[f][c].animal.creaHijo(choice(("arriba", "abajo", "izquierda", "derecha")), self.mapaPrincipal, 0, Conejo("-"))
+
+                    #elif self.mapaPrincipal[f][c].animal.hambre <= 60:
+                        #if self.mapaPrincipal[f][c].animal.alimentacion == "carnivoro":
+                            #self.mapaPrincipal[f][c].animal.cazar()
+                        #else:
+                            #self.mapaPrincipal[f][c].animal.huir()
                     else:
                         self.cambiaPosicionAnimales()  
 #---------------------------------------------------
@@ -494,13 +666,15 @@ class Interfaz(Ecosistema):
         for f in range(fila):
             for c in range(columna):
                 if self.mapaPrincipal[f][c].planta != "-":
-                    self.mapaPrincipal[f][c].imagenPrincipalPlanta = self.interfaz.create_image(c*cuadrado +4, f*cuadrado  +4, image = self.mapaPrincipal[f][c].planta.imagen, anchor="nw", tags=f"planta{f}{c}")
+                    self.mapaPrincipal[f][c].imagenPrincipalPlanta = self.interfaz.create_image(c*cuadrado +4, f*cuadrado  +4,
+                                                                                                 image = self.mapaPrincipal[f][c].planta.imagen, anchor="nw")
 
     def dibujarAnimales(self):
         for f in range(fila):
             for c in range(columna):
                 if self.mapaPrincipal[f][c].animal != "-":
-                    self.mapaPrincipal[f][c].imagenPrincipalAnimal = self.interfaz.create_image(c*cuadrado +4, f*cuadrado +4, image = self.mapaPrincipal[f][c].animal.imagen, anchor="nw", tags="animales")
+                    self.mapaPrincipal[f][c].imagenPrincipalAnimal = self.interfaz.create_image(c*cuadrado +4, f*cuadrado +4,
+                                                                                                 image = self.mapaPrincipal[f][c].animal.imagen, anchor="nw", tags="animales")
                     self.mapaPrincipal[f][c].animal.posicion = [f*cuadrado, c*cuadrado]
 
     def dibujarTablero(self):
@@ -509,10 +683,16 @@ class Interfaz(Ecosistema):
             for x in range(columna):
                 self.interfaz.create_rectangle(x *cuadrado, y *cuadrado, (x +1) *cuadrado, (y +1) *cuadrado, fill=self.mapaPrincipal[y][x].color)
 
-        boton = ttk.Button(text="siguiente ciclo", width=70, command= lambda: (self.actualizaImagenesAnimales()))
-        boton.place(x=columna*40 +2, y=fila*cuadrado -25)
+        entrada = ttk.Entry(width=50)
+        entrada.place(x=columna*cuadrado +75, y= 10)
 
-    def actualizaImagenesAnimales(self):
+        boton1 = ttk.Button(text="enviar comando", width=25)
+        boton1.place(x=columna*cuadrado +150, y=40)
+
+        boton2 = ttk.Button(text="siguiente ciclo", width=70, command= lambda: (self.actualizaMapaPrincipal()))
+        boton2.place(x=columna*cuadrado +2, y=fila*cuadrado -25)
+
+    def actualizaMapaPrincipal(self):
         self.interfaz.delete("animales")
 
         self.cicloDeVida()
@@ -523,6 +703,6 @@ interfaz = Interfaz()
 interfaz.dibujarTablero()
 interfaz.dibujarPlantas()
 interfaz.dibujarAnimales()
-interfaz.cantidadAnimalesTotales()
+#interfaz.cantidadAnimalesTotales()
 
 interfaz()
